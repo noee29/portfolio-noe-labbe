@@ -7,12 +7,13 @@ use Illuminate\Http\Request;
 
 class AdminMiddleware
 {
-    public function handle(Request $request, Closure $next)
-    {
-        $user = $request->user();
-        if (!$user || ($user->role ?? 'user') !== 'admin') {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
-        return $next($request);
+    public function handle(Request $request, Closure $next) {
+    $user = $request->user();
+
+    if (!$user || $user->role !== 'admin') {
+        return response()->json(['message' => 'Unauthorized'], 403);
+    }
+
+    return $next($request);
     }
 }
