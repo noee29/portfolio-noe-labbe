@@ -11,6 +11,9 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    /**
+     * Les attributs qui sont assignables en masse.
+     */
     protected $fillable = [
         'name',
         'email',
@@ -18,11 +21,11 @@ class User extends Authenticatable
         'role',
     ];
 
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
+    /**
+     * Les attributs qui doivent être cachés pour les tableaux.
+     */
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
 }

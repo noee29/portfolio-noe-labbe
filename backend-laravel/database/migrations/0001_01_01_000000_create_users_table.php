@@ -36,6 +36,18 @@ return new class extends Migration
             $table->longText('payload');
             $table->integer('last_activity')->index();
         });
+
+        Schema::create('projects', function (Blueprint $table) {
+        $table->id();
+        $table->string('title');
+        $table->text('description');
+        $table->string('technos');
+        $table->string('github')->nullable();
+        $table->string('website')->nullable();
+        $table->string('image')->nullable();
+        $table->integer('order')->default(0);
+        $table->timestamps();
+    });
     }
 
     /**

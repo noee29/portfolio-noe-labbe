@@ -3,50 +3,33 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Models\Skill;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use App\Models\Skill;
+use App\Http\Requests\SkillStoreRequest;
+use App\Http\Requests\SkillUpdateRequest;
 
 class SkillController extends Controller
 {
     public function index()
     {
-        $skills = Skill::orderBy('id')->get();
-        return response()->json($skills);
+        return response()->json(Skill::all());
     }
 
-    public function show($id)
+    public function store(SkillStoreRequest $request)
     {
-        $skill = Skill::findOrFail($id);
-        return response()->json($skill);
-    }
-
-    public function store(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'category' => 'nullable|string|max:255',
-            'level' => 'nullable|string|max:255',
-            'icon' => 'nullable|string|max:255',
-        ]);
-
-        if ($validator->fails()) return response()->json(['errors' => $validator->errors()], 422);
-
-        $skill = Skill::create($request->only(['name','category','level','icon']));
+        $skill = Skill::create($request->validated());
         return response()->json($skill, 201);
     }
 
-    public function update(Request $request, $id)
+    public function update(SkillUpdateRequest $request, Skill $skill)
     {
-        $skill = Skill::findOrFail($id);
-        $skill->update($request->only(['name','category','level','icon']));
+        $skill->update($request->validated());
         return response()->json($skill);
     }
 
-    public function destroy($id)
+    public function destroy(Skill $skill)
     {
-        $skill = Skill::findOrFail($id);
         $skill->delete();
-        return response()->json(['message' => 'Skill supprimée']);
+        return response()->json(['message' => 'Skill supprimé']);
     }
 }

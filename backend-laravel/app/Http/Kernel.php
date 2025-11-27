@@ -3,61 +3,54 @@
 namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use Illuminate\Foundation\Http\Middleware\TrimStrings;
+use Illuminate\Foundation\Http\Middleware\ValidatePostSize;
+use Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull;
+use Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance;
+use Illuminate\Http\Middleware\HandleCors;
+use Illuminate\Routing\Middleware\SubstituteBindings;
+use App\Http\Middleware\EncryptCookies;
+use App\Http\Middleware\VerifyCsrfToken;
+use App\Http\Middleware\Authenticate;
+use App\Http\Middleware\RedirectIfAuthenticated;
+use App\Http\Middleware\AdminMiddleware;
 
 class Kernel extends HttpKernel
 {
-    /**
-     * The application's global HTTP middleware stack.
-     *
-     * These middleware are run during every request to your application.
-     */
     protected $middleware = [
-        \Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance::class,
-
-        \Illuminate\Http\Middleware\HandleCors::class,
-
-        \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
-
-        \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+        PreventRequestsDuringMaintenance::class,
+        HandleCors::class,
+        ValidatePostSize::class,
+        TrimStrings::class,
+        ConvertEmptyStringsToNull::class,
     ];
 
-    /**
-     * The application's route middleware groups.
-     */
     protected $middlewareGroups = [
         'web' => [
-            \App\Http\Middleware\EncryptCookies::class,
+            EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            VerifyCsrfToken::class,
+            SubstituteBindings::class,
         ],
 
         'api' => [
-            \Illuminate\Routing\Middleware\ThrottleRequests::class.':api',
-
-            \Illuminate\Http\Middleware\HandleCors::class,
-
-            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            'throttle:api',
+            SubstituteBindings::class,
         ],
     ];
 
-    /**
-     * The application's route middleware.
-     *
-     * These middleware may be assigned to groups or used individually.
-     */
     protected $routeMiddleware = [
-        'auth' => \App\Http\Middleware\Authenticate::class,
+        'auth' => Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
-        'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
-        'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
+        'can' => \Illuminate\Auth\Middleware\Authorize::class,
+        'guest' => RedirectIfAuthenticated::class,
         'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
-        'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-
+        'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-
-        'admin' => \App\Http\Middleware\AdminMiddleware::class,
+        'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'admin' => AdminMiddleware::class,
     ];
 }

@@ -18,6 +18,16 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->timestamps();
         });
+
+        Schema::create('formations', function (Blueprint $table) {
+        $table->id();
+        $table->string('title');
+        $table->string('school');
+        $table->text('description');
+        $table->integer('year_start');
+        $table->integer('year_end')->nullable();
+        $table->timestamps();
+    });
     }
 
     public function down(): void

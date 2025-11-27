@@ -16,6 +16,13 @@ return new class extends Migration
             $table->string('icon')->nullable(); // chemin ou nom d'icône
             $table->timestamps();
         });
+
+        Schema::create('skills', function (Blueprint $table) {
+        $table->id();
+        $table->string('name');
+        $table->integer('level');
+        $table->timestamps();
+    });
     }
 
     public function down(): void
