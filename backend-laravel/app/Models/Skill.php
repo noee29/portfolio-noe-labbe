@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Modèle Skill : compétences avec niveau et catégorie.
+ */
 class Skill extends Model
 {
     use HasFactory;
@@ -23,7 +26,11 @@ class Skill extends Model
     ];
 
     /**
-     * Scope pour récupérer les skills par catégorie
+     * Filtre les compétences par catégorie.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string $category Catégorie ciblée
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeByCategory($query, $category)
     {
@@ -31,7 +38,10 @@ class Skill extends Model
     }
 
     /**
-     * Scope pour trier par niveau décroissant
+     * Trie les compétences par niveau décroissant.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeByLevel($query)
     {
@@ -39,7 +49,9 @@ class Skill extends Model
     }
 
     /**
-     * Récupérer toutes les catégories uniques
+     * Récupère la liste des catégories uniques.
+     *
+     * @return \Illuminate\Support\Collection
      */
     public static function getCategories()
     {

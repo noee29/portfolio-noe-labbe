@@ -6,11 +6,21 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class SkillStoreRequest extends FormRequest
 {
+    /**
+     * Autorise la création de compétence.
+     *
+     * @return bool
+     */
     public function authorize(): bool
     {
         return true;
     }
 
+    /**
+     * Règles de validation pour créer une compétence.
+     *
+     * @return array<string, mixed>
+     */
     public function rules(): array
     {
         return [

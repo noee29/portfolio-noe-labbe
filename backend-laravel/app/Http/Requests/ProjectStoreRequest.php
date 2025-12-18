@@ -6,11 +6,21 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class ProjectStoreRequest extends FormRequest
 {
+    /**
+     * Autorise la requête (aucune restriction ici).
+     *
+     * @return bool
+     */
     public function authorize(): bool
     {
         return true;
     }
 
+    /**
+     * Règles de validation pour la création d'un projet.
+     *
+     * @return array<string, mixed>
+     */
     public function rules(): array
     {
         return [

@@ -3,6 +3,10 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
+/**
+ * Composant racine de démonstration Vite/React avec compteur local.
+ * @returns {JSX.Element} UI principale
+ */
 function App() {
   const [count, setCount] = useState(0)
 

@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 
+/**
+ * Modèle Formation : parcours scolaires/professionnels avec dates et descriptif.
+ */
 class Formation extends Model
 {
     use HasFactory;
@@ -51,10 +54,9 @@ class Formation extends Model
     protected $appends = ['duration', 'is_current', 'formatted_period'];
 
     /**
-     * Accesseur pour obtenir la durée de la formation
-     * Retourne la durée en mois ou années
+     * Accesseur pour obtenir la durée de la formation en texte.
      *
-     * @return string
+     * @return string|null Durée formatée ou null si date manquante
      */
     public function getDurationAttribute()
     {
@@ -91,10 +93,10 @@ class Formation extends Model
     }
 
     /**
-     * Accesseur pour obtenir la période formatée
-     * Ex: "Sept 2022 - Juin 2025" ou "Sept 2022 - En cours"
+     * Accesseur pour obtenir la période formatée.
+     * Ex: "Sept 2022 - Juin 2025" ou "Sept 2022 - En cours".
      *
-     * @return string
+     * @return string|null Période lisible ou null si date manquante
      */
     public function getFormattedPeriodAttribute()
     {

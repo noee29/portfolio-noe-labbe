@@ -6,11 +6,21 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class FormationStoreRequest extends FormRequest
 {
+    /**
+     * Autorise la création de formation.
+     *
+     * @return bool
+     */
     public function authorize(): bool
     {
         return true;
     }
 
+    /**
+     * Règles de validation pour créer une formation.
+     *
+     * @return array<string, mixed>
+     */
     public function rules(): array
     {
         return [

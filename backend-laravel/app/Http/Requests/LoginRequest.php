@@ -8,11 +8,21 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 
 class LoginRequest extends FormRequest
 {
+    /**
+     * Autorise la tentative de connexion.
+     *
+     * @return bool
+     */
     public function authorize(): bool
     {
         return true;
     }
 
+    /**
+     * Règles de validation pour le login.
+     *
+     * @return array<string, mixed>
+     */
     public function rules(): array
     {
         return [
@@ -21,6 +31,11 @@ class LoginRequest extends FormRequest
         ];
     }
 
+    /**
+     * Messages d'erreur personnalisés pour la validation.
+     *
+     * @return array<string, string>
+     */
     public function messages(): array
     {
         return [
@@ -31,6 +46,12 @@ class LoginRequest extends FormRequest
         ];
     }
 
+    /**
+     * Personnalise la réponse JSON lors d'un échec de validation.
+     *
+     * @param Validator $validator Instance contenant les erreurs
+     * @throws HttpResponseException
+     */
     protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(

@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * Modèle Project : projets avec image, liens et ordre d'affichage.
+ */
 class Project extends Model
 {
     use HasFactory;
@@ -29,7 +32,9 @@ class Project extends Model
     ];
 
     /**
-     * Accesseur pour l'URL complète de l'image
+     * Retourne l'URL publique complète de l'image stockée.
+     *
+     * @return string|null URL ou null si aucune image
      */
     public function getImageUrlAttribute()
     {
@@ -47,7 +52,10 @@ class Project extends Model
     }
 
     /**
-     * Scope pour récupérer les projets mis en avant
+     * Filtre uniquement les projets mis en avant.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeFeatured($query)
     {
@@ -55,7 +63,10 @@ class Project extends Model
     }
 
     /**
-     * Scope pour trier par ordre
+     * Trie par `order` ascendant puis par date de création descendante.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeOrdered($query)
     {
