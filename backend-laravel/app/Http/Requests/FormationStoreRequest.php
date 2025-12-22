@@ -24,11 +24,12 @@ class FormationStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title'       => ['required', 'string', 'max:255'],
             'school'      => ['required', 'string', 'max:255'],
+            'degree'      => ['nullable', 'string', 'max:255'],
+            'field'       => ['nullable', 'string', 'max:255'],
+            'start_date'  => ['nullable', 'date', 'date_format:Y-m-d'],
+            'end_date'    => ['nullable', 'date', 'date_format:Y-m-d', 'after_or_equal:start_date'],
             'description' => ['nullable', 'string'],
-            'year_start'  => ['required', 'integer', 'min:1900', 'max:' . date('Y')],
-            'year_end'    => ['nullable', 'integer', 'min:1900', 'max:' . (date('Y') + 10)],
         ];
     }
 }

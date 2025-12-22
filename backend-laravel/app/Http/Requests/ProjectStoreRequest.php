@@ -24,12 +24,15 @@ class ProjectStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title'       => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string'],
-            'technos'     => ['nullable', 'string'],
-            'github'      => ['nullable', 'url'],
-            'website'     => ['nullable', 'url'],
-            'image'       => ['nullable', 'image', 'max:2048'],
+            'title'         => ['required', 'string', 'max:255'],
+            'description'   => ['required', 'string'],
+            'technologies'  => ['nullable', 'array'],
+            'technologies.*'=> ['string', 'max:255'],
+            'github_link'   => ['nullable', 'url'],
+            'demo_link'     => ['nullable', 'url'],
+            'featured'      => ['nullable', 'boolean'],
+            'order'         => ['nullable', 'integer'],
+            'image'         => ['nullable', 'image', 'max:2048'],
         ];
     }
 }

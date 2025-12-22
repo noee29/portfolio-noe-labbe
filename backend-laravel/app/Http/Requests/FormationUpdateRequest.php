@@ -24,11 +24,12 @@ class FormationUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title'       => ['sometimes', 'string', 'max:255'],
             'school'      => ['sometimes', 'string', 'max:255'],
+            'degree'      => ['sometimes', 'nullable', 'string', 'max:255'],
+            'field'       => ['sometimes', 'nullable', 'string', 'max:255'],
+            'start_date'  => ['sometimes', 'nullable', 'date', 'date_format:Y-m-d'],
+            'end_date'    => ['sometimes', 'nullable', 'date', 'date_format:Y-m-d', 'after_or_equal:start_date'],
             'description' => ['sometimes', 'nullable', 'string'],
-            'year_start'  => ['sometimes', 'integer', 'min:1900', 'max:' . date('Y')],
-            'year_end'    => ['sometimes', 'nullable', 'integer', 'min:1900', 'max:' . (date('Y') + 10)],
         ];
     }
 }

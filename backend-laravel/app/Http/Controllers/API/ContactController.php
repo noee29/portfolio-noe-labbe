@@ -56,4 +56,16 @@ class ContactController extends Controller
         $contact->delete();
         return response()->json(['message' => 'Contact supprimé']);
     }
+
+    /**
+     * Marque un message de contact comme lu.
+     *
+     * @param Contact $contact Message à marquer
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function markAsRead(Contact $contact)
+    {
+        $contact->update(['read' => true]);
+        return response()->json(['message' => 'Message marqué comme lu', 'contact' => $contact]);
+    }
 }

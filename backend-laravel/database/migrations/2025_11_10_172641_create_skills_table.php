@@ -11,18 +11,11 @@ return new class extends Migration
         Schema::create('skills', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('category')->nullable(); // frontend/backend
-            $table->string('level')->nullable(); // ex: beginner,intermediate or expert
-            $table->string('icon')->nullable(); // chemin ou nom d'icône
+            $table->string('category')->nullable();
+            $table->integer('level')->nullable();
+            $table->string('icon')->nullable();
             $table->timestamps();
         });
-
-        Schema::create('skills', function (Blueprint $table) {
-        $table->id();
-        $table->string('name');
-        $table->integer('level');
-        $table->timestamps();
-    });
     }
 
     public function down(): void

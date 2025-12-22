@@ -39,7 +39,7 @@ class ProjectController extends Controller
      */
     public function store(ProjectStoreRequest $request)
     {
-        $data = $request->validated();
+        $data = $this->normalizeProjectData($request->validated(), $request);
 
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('projects', 'public');
@@ -61,7 +61,7 @@ class ProjectController extends Controller
      */
     public function update(ProjectUpdateRequest $request, Project $project)
     {
-        $data = $request->validated();
+        $data = $this->normalizeProjectData($request->validated(), $request);
 
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('projects', 'public');
@@ -103,4 +103,47 @@ class ProjectController extends Controller
 
         return response()->json(['message' => 'Ordre mis à jour']);
     }
+
+        /**
+         * Normalise les champs de projet (compatibilité anciens noms et format technos).
+         *
+         * @param array $data Données validées
+         * @param Request $request Requête brute (pour récupérer d'anciens champs éventuels)
+         * @return array
+         */
+        private function normalizeProjectData(array $data, Request $request): array
+        {
+            if (!isset($data['technologies']) && $request->filled('technos')) {
+                $data['technologies'] = $this->parseTechnologies($request->input('technos'));
+            }
+
+            if (isset($data['technologies']) && is_string($data['technologies'])) {
+                $data['technologies'] = $this->parseTechnologies($data['technologies']);
+            }
+
+            if (!isset($data['github_link']) && $request->filled('github')) {
+                $data['github_link'] = $request->input('github');
+            }
+
+            if (!isset($data['demo_link']) && $request->filled('website')) {
+                $data['demo_link'] = $request->input('website');
+            }
+
+            return $data;
+        }
+
+        /**
+         * Transforme une chaîne de technos en tableau (séparateur virgule ou point-virgule).
+         *
+         * @param string $value
+         * @return array
+         */
+        private function parseTechnologies(string $value): array
+        {
+            return collect(preg_split('/[,;]+/', $value))
+                ->map(fn ($item) => trim($item))
+                ->filter()
+                ->values()
+                ->all();
+        }
 }
