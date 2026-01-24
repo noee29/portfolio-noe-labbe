@@ -7,16 +7,37 @@ export default function SectionCompetences() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    let mounted = true;
-    skillsApi.getAll()
-      .then((res) => {
-        const data = Array.isArray(res.data) ? res.data : (res.data?.data || []);
-        if (mounted) setSkills(data);
-      })
-      .catch(() => setError('Impossible de charger les compétences'))
-      .finally(() => setLoading(false));
-    return () => { mounted = false; };
+  useEffect(function() {
+    let composantMonte = true;
+    
+    function chargerCompetences() {
+      skillsApi.getAll()
+        .then(function(reponse) {
+          let competences = [];
+          
+          if (Array.isArray(reponse.data)) {
+            competences = reponse.data;
+          } else if (reponse.data && reponse.data.data && Array.isArray(reponse.data.data)) {
+            competences = reponse.data.data;
+          }
+          
+          if (composantMonte) {
+            setSkills(competences);
+          }
+        })
+        .catch(function() {
+          setError('Impossible de charger les compétences');
+        })
+        .finally(function() {
+          setLoading(false);
+        });
+    }
+    
+    chargerCompetences();
+    
+    return function() {
+      composantMonte = false;
+    };
   }, []);
 
   return (

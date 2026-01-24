@@ -15,7 +15,7 @@ const api = axios.create({
 // Intercepteur pour ajouter le token
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('authToken');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -30,9 +30,9 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      localStorage.removeItem('token');
-      window.location.href = '/admin/login';
+    if (error.response && error.response.status === 401) {
+      localStorage.removeItem('authToken');
+      window.location.href = '/admin';
     }
     return Promise.reject(error);
   }
@@ -103,10 +103,12 @@ export const contactApi = {
  * Services d'authentification.
  */
 export const authApi = {
-  /** Authentifie et récupère le token. */
-  login: (credentials) => api.post('/login', credentials),
-  /** Révoque le token courant. */
+  /** Inscription d'un nouvel utilisateur. */
+  register: (data) => api.post('/register', data),
+  /** Connexion d'un utilisateur. */
+  login: (data) => api.post('/login', data),
+  /** Déconnexion de l'utilisateur courant. */
   logout: () => api.post('/logout'),
-  /** Récupère l'utilisateur connecté (nécessite token). */
+  /** Récupère les informations de l'utilisateur connecté. */
   getUser: () => api.get('/user'),
 };

@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Contact;
 use App\Http\Requests\ContactStoreRequest;
 use App\Http\Requests\ContactUpdateRequest;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
 class ContactController extends Controller
 {
@@ -28,7 +30,26 @@ class ContactController extends Controller
      */
     public function store(ContactStoreRequest $request)
     {
-        $contact = Contact::create($request->validated());
+        $data = $request->validated();
+
+        $contact = Contact::create($data);
+
+        try {
+            $contenu = "Nom : " . $data['name'] . "\n" .
+                       "Email : " . $data['email'] . "\n\n" .
+                       "Message :\n" . $data['message'];
+
+            Mail::raw($contenu, function ($message) use ($data) {
+                $message->to('noe.labbe29@gmail.com')
+                        ->replyTo($data['email'], $data['name'])
+                        ->subject('Nouveau message de contact - Portfolio');
+            });
+        } catch (\Throwable $e) {
+            Log::error('Erreur envoi mail contact', [
+                'error' => $e->getMessage(),
+            ]);
+        }
+
         return response()->json($contact, 201);
     }
 

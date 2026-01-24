@@ -14,7 +14,10 @@ function ElementFormation({ f }) {
       <div className="rounded-lg border border-cyan-500/20 bg-slate-800/50 p-4 shadow-sm hover:shadow-md hover:shadow-cyan-500/10 transition-shadow backdrop-blur-sm">
         <div className="flex items-center justify-between gap-3">
           <h3 className="text-base font-bold text-gray-100">{title}</h3>
-          <span className="text-xs text-gray-400 font-medium">{start}{end ? ` — ${end}` : ''}</span>
+          <span className="text-xs text-gray-400 font-medium">
+            {start}
+            {end && ` — ${end}`}
+          </span>
         </div>
         {org && (
           <p className="mt-1 text-sm text-gray-400">{org}</p>
@@ -29,16 +32,39 @@ export default function SectionFormations() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    let mounted = true;
-    formationsApi.getAll()
-      .then((res) => {
-        const data = Array.isArray(res.data) ? res.data : (res.data?.data || []);
-        if (mounted) setItems(data.slice(0, 5));
-      })
-      .catch(() => setError('Impossible de charger les formations'))
-      .finally(() => setLoading(false));
-    return () => { mounted = false; };
+  useEffect(function() {
+    let composantMonte = true;
+    
+    function chargerFormations() {
+      formationsApi.getAll()
+        .then(function(reponse) {
+          let formations = [];
+          
+          if (Array.isArray(reponse.data)) {
+            formations = reponse.data;
+          } else if (reponse.data && reponse.data.data && Array.isArray(reponse.data.data)) {
+            formations = reponse.data.data;
+          }
+          
+          const cinqPremieres = formations.slice(0, 5);
+          
+          if (composantMonte) {
+            setItems(cinqPremieres);
+          }
+        })
+        .catch(function() {
+          setError('Impossible de charger les formations');
+        })
+        .finally(function() {
+          setLoading(false);
+        });
+    }
+    
+    chargerFormations();
+    
+    return function() {
+      composantMonte = false;
+    };
   }, []);
 
   return (

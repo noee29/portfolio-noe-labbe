@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import ConteneurPage from '../layout/ConteneurPage.jsx';
 
 export default function SectionAccueil() {
@@ -24,12 +25,12 @@ export default function SectionAccueil() {
               Bonjour, je m’appelle Noé Labbé, j’ai 21 ans et je suis étudiant en L3 informatique à l'Université Catholique de Lille (EDN). Je souhaite m’orienter vers les métiers de la data.
             </p>
             <div className="flex flex-col sm:flex-row items-center lg:items-start gap-4">
-              <a href="#projects" className="px-8 py-4 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-semibold hover:shadow-xl hover:shadow-cyan-500/50 hover:-translate-y-1 transition-all">
+              <Link to="/projets" className="px-8 py-4 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-semibold hover:shadow-xl hover:shadow-cyan-500/50 hover:-translate-y-1 transition-all">
                 Voir mes projets
-              </a>
-              <a href="#contact" className="px-8 py-4 rounded-lg border-2 border-gray-600 text-gray-300 font-semibold hover:border-cyan-300 hover:text-cyan-200 hover:-translate-y-1 transition-all">
+              </Link>
+              <Link to="/contact" className="px-8 py-4 rounded-lg border-2 border-gray-600 text-gray-300 font-semibold hover:border-cyan-300 hover:text-cyan-200 hover:-translate-y-1 transition-all">
                 Contact
-              </a>
+              </Link>
             </div>
           </div>
           

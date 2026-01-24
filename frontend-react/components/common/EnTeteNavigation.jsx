@@ -1,49 +1,119 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import ConteneurPage from '../layout/ConteneurPage.jsx';
 
+/**
+ * EnTeteNavigation - Header avec navigation
+ */
 export default function EnTeteNavigation() {
-  const [open, setOpen] = useState(false);
-  const navItems = [
-    { href: '#projects', label: 'Projets' },
-    { href: '#skills', label: 'Compétences' },
-    { href: '#formations', label: 'Formations' },
-    { href: '#contact', label: 'Contact' },
-  ];
-
+  const [menuOuvert, setMenuOuvert] = useState(false);
+  
+  function basculerMenu() {
+    setMenuOuvert(!menuOuvert);
+  }
+  
+  function fermerMenu() {
+    setMenuOuvert(false);
+  }
+  
   return (
     <header className="sticky top-0 z-50 backdrop-blur-xl supports-[backdrop-filter]:bg-slate-900/60 bg-slate-900/80 border-b border-cyan-500/20 shadow-lg shadow-cyan-500/10">
       <ConteneurPage className="flex items-center justify-between py-4">
-        <a href="#hero" className="font-bold text-xl tracking-tight text-cyan-300">
-          Portfolio
-        </a>
+        {/* Logo/Titre */}
+        <Link to="/" className="font-bold text-xl tracking-tight text-cyan-300">
+          Portfolio Noé Labbé
+        </Link>
+        
+        {/* Navigation desktop (cachée sur mobile) */}
         <nav className="hidden md:flex items-center gap-1">
-          {navItems.map((item) => (
-            <a key={item.href} href={item.href} className="text-sm text-gray-300 hover:text-cyan-300 px-3 py-2 rounded-lg transition-colors">
-              {item.label}
-            </a>
-          ))}
+          <Link 
+            to="/projets" 
+            className="text-sm text-gray-300 hover:text-cyan-300 px-3 py-2 rounded-lg transition-colors"
+          >
+            Projets
+          </Link>
+          <Link 
+            to="/competences" 
+            className="text-sm text-gray-300 hover:text-cyan-300 px-3 py-2 rounded-lg transition-colors"
+          >
+            Compétences
+          </Link>
+          <Link 
+            to="/formations" 
+            className="text-sm text-gray-300 hover:text-cyan-300 px-3 py-2 rounded-lg transition-colors"
+          >
+            Formations
+          </Link>
+          <Link 
+            to="/contact" 
+            className="text-sm text-gray-300 hover:text-cyan-300 px-3 py-2 rounded-lg transition-colors"
+          >
+            Contact
+          </Link>
         </nav>
         <div className="hidden md:block">
-          <a href="#contact" className="text-sm font-semibold px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white hover:shadow-lg hover:shadow-cyan-500/30 transition-all hover:scale-105">
-            Me contacter
+          <a 
+            href="/CV/CV Noé LABBÉ (2).pdf" 
+            download="CV_Noe_Labbe.pdf"
+            className="text-sm font-semibold px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white hover:shadow-lg hover:shadow-cyan-500/30 transition-all hover:scale-105 inline-flex items-center gap-2"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            Télécharger CV
           </a>
         </div>
-        <button onClick={() => setOpen(!open)} aria-label="Menu" className="md:hidden p-2 rounded-lg border border-cyan-500/30 hover:border-cyan-400 transition-colors">
+        
+        {/* Bouton menu mobile (visible seulement sur mobile) */}
+        <button onClick={basculerMenu} aria-label="Menu" className="md:hidden p-2 rounded-lg border border-cyan-500/30 hover:border-cyan-400 transition-colors">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="text-gray-300">
             <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
           </svg>
         </button>
       </ConteneurPage>
-      {open && (
+      
+      {/* Menu mobile déroulant (affiché seulement si menuOuvert est true) */}
+      {menuOuvert && (
         <div className="md:hidden border-t border-cyan-500/20">
           <ConteneurPage className="py-3 flex flex-col gap-2">
-            {navItems.map((item) => (
-              <a key={item.href} href={item.href} className="text-sm text-gray-300 hover:text-cyan-300 px-3 py-2 rounded-lg transition-colors" onClick={() => setOpen(false)}>
-                {item.label}
-              </a>
-            ))}
-            <a href="#contact" className="text-sm font-semibold px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white" onClick={() => setOpen(false)}>
-              Me contacter
+            <Link 
+              to="/projets" 
+              className="text-sm text-gray-300 hover:text-cyan-300 px-3 py-2 rounded-lg transition-colors" 
+              onClick={fermerMenu}
+            >
+              Projets
+            </Link>
+            <Link 
+              to="/competences" 
+              className="text-sm text-gray-300 hover:text-cyan-300 px-3 py-2 rounded-lg transition-colors" 
+              onClick={fermerMenu}
+            >
+              Compétences
+            </Link>
+            <Link 
+              to="/formations" 
+              className="text-sm text-gray-300 hover:text-cyan-300 px-3 py-2 rounded-lg transition-colors" 
+              onClick={fermerMenu}
+            >
+              Formations
+            </Link>
+            <Link 
+              to="/contact" 
+              className="text-sm text-gray-300 hover:text-cyan-300 px-3 py-2 rounded-lg transition-colors" 
+              onClick={fermerMenu}
+            >
+              Contact
+            </Link>
+            <a 
+              href="/CV/CV Noé LABBÉ (2).pdf" 
+              download="CV_Noe_Labbe.pdf"
+              className="text-sm font-semibold px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white inline-flex items-center gap-2" 
+              onClick={fermerMenu}
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              Télécharger CV
             </a>
           </ConteneurPage>
         </div>

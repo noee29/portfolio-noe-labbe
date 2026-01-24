@@ -20,11 +20,20 @@ function CardProjet({ project }) {
       )}
       {Array.isArray(project.tags) && project.tags.length > 0 && (
         <div className="mt-3 flex flex-wrap gap-2">
-          {project.tags.slice(0, 5).map((t, idx) => (
-            <span key={idx} className="text-xs px-2.5 py-1 rounded-full bg-cyan-950/60 text-cyan-200 font-medium border border-cyan-500/30">
-              {typeof t === 'string' ? t : t.name || ''}
-            </span>
-          ))}
+          {project.tags.slice(0, 5).map((t, idx) => {
+            let tagText = '';
+            if (typeof t === 'string') {
+              tagText = t;
+            } else if (t && t.name) {
+              tagText = t.name;
+            }
+            
+            return (
+              <span key={idx} className="text-xs px-2.5 py-1 rounded-full bg-cyan-950/60 text-cyan-200 font-medium border border-cyan-500/30">
+                {tagText}
+              </span>
+            );
+          })}
         </div>
       )}
     </div>
@@ -36,16 +45,39 @@ export default function SectionProjets() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    let mounted = true;
-    projectsApi.getAll()
-      .then((res) => {
-        const data = Array.isArray(res.data) ? res.data : (res.data?.data || []);
-        if (mounted) setProjects(data.slice(0, 6));
-      })
-      .catch(() => setError("Impossible de charger les projets"))
-      .finally(() => setLoading(false));
-    return () => { mounted = false; };
+  useEffect(function() {
+    let composantMonte = true;
+    
+    function chargerProjets() {
+      projectsApi.getAll()
+        .then(function(reponse) {
+          let projets = [];
+          
+          if (Array.isArray(reponse.data)) {
+            projets = reponse.data;
+          } else if (reponse.data && reponse.data.data && Array.isArray(reponse.data.data)) {
+            projets = reponse.data.data;
+          }
+          
+          const sixPremiers = projets.slice(0, 6);
+          
+          if (composantMonte) {
+            setProjects(sixPremiers);
+          }
+        })
+        .catch(function() {
+          setError("Impossible de charger les projets");
+        })
+        .finally(function() {
+          setLoading(false);
+        });
+    }
+    
+    chargerProjets();
+    
+    return function() {
+      composantMonte = false;
+    };
   }, []);
 
   return (
