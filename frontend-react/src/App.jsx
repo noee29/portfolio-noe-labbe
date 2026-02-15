@@ -10,6 +10,7 @@ import PageProjets from '../pages/PageProjets.jsx'
 import PageFormations from '../pages/PageFormations.jsx'
 import PageContact from '../pages/PageContact.jsx'
 import PageAdmin from '../pages/PageAdmin.jsx'
+import PageDetailProjet from '../pages/PageDetailProjet.jsx'
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             <Route path="/" element={<PageAccueil />} />
             <Route path="/competences" element={<PageCompetences />} />
             <Route path="/projets" element={<PageProjets />} />
+            <Route path="/projets/:id" element={<PageDetailProjet />} />
             <Route path="/formations" element={<PageFormations />} />
             <Route path="/contact" element={<PageContact />} />
             <Route path="/admin" element={<PageAdmin />} />

@@ -72,4 +72,14 @@ class Project extends Model
     {
         return $query->orderBy('order', 'asc')->orderBy('created_at', 'desc');
     }
+
+    /**
+     * Retourne les images/vidéos associées au projet, triées par ordre.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function images()
+    {
+        return $this->hasMany(ProjectImage::class)->orderBy('order');
+    }
 }

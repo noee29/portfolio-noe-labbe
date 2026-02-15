@@ -17,7 +17,7 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        return response()->json(Project::orderBy('order')->get());
+        return response()->json(Project::with('images')->orderBy('order')->get());
     }
 
     /**
@@ -28,7 +28,7 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        return response()->json($project);
+        return response()->json($project->load('images'));
     }
 
     /**
