@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8000/api';
+// L'URL de l'API vient du fichier .env (variable VITE_API_URL) par défaut localhost:8000.
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
 
 // Instance axios préconfigurée vers l'API Laravel.
 const api = axios.create({
