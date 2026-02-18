@@ -1,5 +1,6 @@
 import SectionAccueil from '../components/home/SectionAccueil.jsx';
 import ConteneurPage from '../components/layout/ConteneurPage.jsx';
+import AnimationApparition from '../components/common/AnimationApparition.jsx';
 
 /**
  * PageAccueil - Page d'accueil (présentation du profil)
@@ -15,6 +16,7 @@ export default function PageAccueil() {
       {/* Section optionnelle pour les prochaines étapes */}
       <section className="py-16 sm:py-20">
         <ConteneurPage>
+          <AnimationApparition direction="haut">
           <div className="text-center max-w-2xl mx-auto">
             <h2 className="text-3xl font-bold text-gray-100 mb-4">
               Explorez mon portfolio
@@ -23,6 +25,7 @@ export default function PageAccueil() {
               Découvrez mes projets, compétences et formations à travers les pages dédiées.
             </p>
           </div>
+          </AnimationApparition>
         </ConteneurPage>
       </section>
     </div>

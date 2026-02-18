@@ -1,4 +1,6 @@
 import { Link } from 'react-router-dom';
+// eslint-disable-next-line no-unused-vars
+import { motion } from 'framer-motion';
 import ConteneurPage from '../layout/ConteneurPage.jsx';
 
 export default function SectionAccueil() {
@@ -12,7 +14,13 @@ export default function SectionAccueil() {
       
       <ConteneurPage className="relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-12">
-          <div className="text-center lg:text-left">
+          {/* Texte : apparaît depuis la gauche */}
+          <motion.div
+            className="text-center lg:text-left"
+            initial={{ opacity: 0, x: -40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
+          >
             <div className="mb-6">
               <span className="inline-block text-xs font-bold tracking-widest uppercase text-cyan-300 bg-slate-900 px-4 py-2 rounded-full border border-cyan-700/60">
                 Qui suis-je ?
@@ -24,17 +32,28 @@ export default function SectionAccueil() {
             <p className="text-lg text-gray-300 max-w-2xl mb-8 leading-relaxed">
               Bonjour, je m’appelle Noé Labbé, j’ai 21 ans et je suis étudiant en L3 informatique à l'Université Catholique de Lille (EDN). Je souhaite m’orienter vers les métiers de la data.
             </p>
-            <div className="flex flex-col sm:flex-row items-center lg:items-start gap-4">
+            <motion.div
+              className="flex flex-col sm:flex-row items-center lg:items-start gap-4"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4, ease: 'easeOut' }}
+            >
               <Link to="/projets" className="px-8 py-4 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-semibold hover:shadow-xl hover:shadow-cyan-500/50 hover:-translate-y-1 transition-all">
                 Voir mes projets
               </Link>
               <Link to="/contact" className="px-8 py-4 rounded-lg border-2 border-gray-600 text-gray-300 font-semibold hover:border-cyan-300 hover:text-cyan-200 hover:-translate-y-1 transition-all">
                 Contact
               </Link>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
           
-          <div className="relative w-full max-w-md aspect-[3/4] mx-auto lg:mx-0">
+          {/* Photo : apparaît depuis la droite */}
+          <motion.div
+            className="relative w-full max-w-md aspect-[3/4] mx-auto lg:mx-0"
+            initial={{ opacity: 0, x: 40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
+          >
             <div className="absolute inset-0 rounded-2xl border border-cyan-500/20 shadow-2xl shadow-cyan-500/10 overflow-hidden bg-slate-900">
               <img
                 src="../images/20250228_185234.jpg"
@@ -43,7 +62,7 @@ export default function SectionAccueil() {
                 loading="lazy"
               />
             </div>
-          </div>
+          </motion.div>
         </div>
       </ConteneurPage>
     </section>

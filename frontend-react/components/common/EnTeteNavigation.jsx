@@ -53,8 +53,8 @@ export default function EnTeteNavigation() {
         </nav>
         <div className="hidden md:block">
           <a 
-            href="/CV/CV Noé LABBÉ (2).pdf" 
-            download="CV_Noe_Labbe.pdf"
+            href="/CV/CV Noé LABBÉ Portfolio.pdf" 
+            download="CV Noé LABBÉ Portfolio.pdf"
             className="text-sm font-semibold px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white hover:shadow-lg hover:shadow-cyan-500/30 transition-all hover:scale-105 inline-flex items-center gap-2"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -105,8 +105,8 @@ export default function EnTeteNavigation() {
               Contact
             </Link>
             <a 
-              href="/CV/CV Noé LABBÉ (2).pdf" 
-              download="CV_Noe_Labbe.pdf"
+              href="/CV/CV Noé LABBÉ Portfolio.pdf" 
+              download="CV Noé LABBÉ Portfolio.pdf"
               className="text-sm font-semibold px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white inline-flex items-center gap-2" 
               onClick={fermerMenu}
             >
