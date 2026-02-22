@@ -3,57 +3,53 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Formation;
 use App\Http\Requests\FormationStoreRequest;
 use App\Http\Requests\FormationUpdateRequest;
 
 class FormationController extends Controller
 {
-    /**
-     * Liste toutes les formations.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
+    // Récupérer toutes les formations
     public function index()
     {
-        return response()->json(Formation::all());
+        try {
+            $formations = Formation::all();
+            return response()->json($formations);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Erreur de connexion à la base de données'], 500);
+        }
     }
 
-    /**
-     * Crée une formation à partir des données validées.
-     *
-     * @param FormationStoreRequest $request Données de formation
-     * @return \Illuminate\Http\JsonResponse
-     */
+    // Créer une nouvelle formation
     public function store(FormationStoreRequest $request)
     {
-        $formation = Formation::create($request->validated());
-        return response()->json($formation, 201);
+        try {
+            $formation = Formation::create($request->validated());
+            return response()->json($formation, 201);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Erreur de connexion à la base de données'], 500);
+        }
     }
 
-    /**
-     * Met à jour une formation existante.
-     *
-     * @param FormationUpdateRequest $request Données mises à jour
-     * @param Formation $formation Modèle à modifier
-     * @return \Illuminate\Http\JsonResponse
-     */
+    // Modifier une formation
     public function update(FormationUpdateRequest $request, Formation $formation)
     {
-        $formation->update($request->validated());
-        return response()->json($formation);
+        try {
+            $formation->update($request->validated());
+            return response()->json($formation);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Erreur de connexion à la base de données'], 500);
+        }
     }
 
-    /**
-     * Supprime une formation.
-     *
-     * @param Formation $formation Modèle à supprimer
-     * @return \Illuminate\Http\JsonResponse
-     */
+    // Supprimer une formation
     public function destroy(Formation $formation)
     {
-        $formation->delete();
-        return response()->json(['message' => 'Formation supprimée']);
+        try {
+            $formation->delete();
+            return response()->json(['message' => 'Formation supprimée']);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Erreur de connexion à la base de données'], 500);
+        }
     }
 }

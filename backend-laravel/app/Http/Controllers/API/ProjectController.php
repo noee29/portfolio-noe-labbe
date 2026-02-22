@@ -10,140 +10,145 @@ use App\Http\Requests\ProjectUpdateRequest;
 
 class ProjectController extends Controller
 {
-    /**
-     * Retourne les projets triés par ordre d'affichage.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
+    // Récupérer tous les projets (triés par ordre) avec leurs images
     public function index()
     {
-        return response()->json(Project::with('images')->orderBy('order')->get());
+        try {
+            $projets = Project::with('images')->orderBy('order')->get();
+            return response()->json($projets);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Erreur de connexion à la base de données'], 500);
+        }
     }
 
-    /**
-     * Affiche un projet spécifique.
-     *
-     * @param Project $project Projet ciblé (injection de route-model binding)
-     * @return \Illuminate\Http\JsonResponse
-     */
+    // Afficher un seul projet avec ses images
     public function show(Project $project)
     {
-        return response()->json($project->load('images'));
+        try {
+            $project->load('images');
+            return response()->json($project);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Erreur de connexion à la base de données'], 500);
+        }
     }
 
-    /**
-     * Crée un projet, stocke l'image si présente et définit l'ordre.
-     *
-     * @param ProjectStoreRequest $request Données validées du projet
-     * @return \Illuminate\Http\JsonResponse
-     */
+    // Créer un nouveau projet
     public function store(ProjectStoreRequest $request)
     {
-        $data = $this->normalizeProjectData($request->validated(), $request);
+        try {
+            $data = $request->validated();
 
-        if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('projects', 'public');
+            $data = $this->fixOldFieldNames($data, $request);
+
+            // Convertir les technologies en tableau si c'est une chaîne
+            if (isset($data['technologies']) && is_string($data['technologies'])) {
+                $data['technologies'] = $this->splitTechnologies($data['technologies']);
+            }
+
+            // Stocker l'image si elle est envoyée
+            if ($request->hasFile('image')) {
+                $data['image'] = $request->file('image')->store('projects', 'public');
+            }
+
+            // Définir l'ordre : le nouveau projet va à la fin
+            $data['order'] = Project::count();
+
+            $projet = Project::create($data);
+            return response()->json($projet, 201);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Erreur de connexion à la base de données'], 500);
         }
-
-        $data['order'] = Project::count();
-
-        $project = Project::create($data);
-
-        return response()->json($project, 201);
     }
 
-    /**
-     * Met à jour un projet existant et remplace l'image si fournie.
-     *
-     * @param ProjectUpdateRequest $request Données validées mises à jour
-     * @param Project $project Projet à modifier
-     * @return \Illuminate\Http\JsonResponse
-     */
+    // Modifier un projet existant
     public function update(ProjectUpdateRequest $request, Project $project)
     {
-        $data = $this->normalizeProjectData($request->validated(), $request);
+        try {
+            $data = $request->validated();
 
-        if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('projects', 'public');
+            $data = $this->fixOldFieldNames($data, $request);
+
+            // Convertir les technologies en tableau si c'est une chaîne
+            if (isset($data['technologies']) && is_string($data['technologies'])) {
+                $data['technologies'] = $this->splitTechnologies($data['technologies']);
+            }
+
+            // Remplacer l'image si une nouvelle est envoyée
+            if ($request->hasFile('image')) {
+                $data['image'] = $request->file('image')->store('projects', 'public');
+            }
+
+            $project->update($data);
+            return response()->json($project);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Erreur de connexion à la base de données'], 500);
         }
-
-        $project->update($data);
-
-        return response()->json($project);
     }
 
-    /**
-     * Supprime un projet.
-     *
-     * @param Project $project Projet à supprimer
-     * @return \Illuminate\Http\JsonResponse
-     */
+    // Supprimer un projet
     public function destroy(Project $project)
     {
-        $project->delete();
-        return response()->json(['message' => 'Projet supprimé']);
+        try {
+            $project->delete();
+            return response()->json(['message' => 'Projet supprimé']);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Erreur de connexion à la base de données'], 500);
+        }
     }
 
-    /**
-     * Met à jour l'ordre d'affichage des projets.
-     *
-     * @param Request $request Tableau `order` contenant les IDs dans le nouvel ordre
-     * @return \Illuminate\Http\JsonResponse
-     */
+    // Changer l'ordre d'affichage des projets
     public function reorder(Request $request)
     {
-        $request->validate([
-            'order' => 'required|array',
-            'order.*' => 'integer'
-        ]);
+        try {
+            $request->validate([
+                'order'   => 'required|array',
+                'order.*' => 'integer',
+            ]);
 
-        foreach ($request->order as $index => $projectId) {
-            Project::where('id', $projectId)->update(['order' => $index]);
+            foreach ($request->order as $position => $projetId) {
+                Project::where('id', $projetId)->update(['order' => $position]);
+            }
+
+            return response()->json(['message' => 'Ordre mis à jour']);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Erreur de connexion à la base de données'], 500);
         }
-
-        return response()->json(['message' => 'Ordre mis à jour']);
     }
 
-        /**
-         * Normalise les champs de projet (compatibilité anciens noms et format technos).
-         *
-         * @param array $data Données validées
-         * @param Request $request Requête brute (pour récupérer d'anciens champs éventuels)
-         * @return array
-         */
-        private function normalizeProjectData(array $data, Request $request): array
-        {
-            if (!isset($data['technologies']) && $request->filled('technos')) {
-                $data['technologies'] = $this->parseTechnologies($request->input('technos'));
-            }
 
-            if (isset($data['technologies']) && is_string($data['technologies'])) {
-                $data['technologies'] = $this->parseTechnologies($data['technologies']);
-            }
-
-            if (!isset($data['github_link']) && $request->filled('github')) {
-                $data['github_link'] = $request->input('github');
-            }
-
-            if (!isset($data['demo_link']) && $request->filled('website')) {
-                $data['demo_link'] = $request->input('website');
-            }
-
-            return $data;
+    private function fixOldFieldNames(array $data, Request $request): array
+    {
+        // "technos" -> "technologies"
+        if (!isset($data['technologies']) && $request->filled('technos')) {
+            $data['technologies'] = $this->splitTechnologies($request->input('technos'));
         }
 
-        /**
-         * Transforme une chaîne de technos en tableau (séparateur virgule ou point-virgule).
-         *
-         * @param string $value
-         * @return array
-         */
-        private function parseTechnologies(string $value): array
-        {
-            return collect(preg_split('/[,;]+/', $value))
-                ->map(fn ($item) => trim($item))
-                ->filter()
-                ->values()
-                ->all();
+        // "github" -> "github_link"
+        if (!isset($data['github_link']) && $request->filled('github')) {
+            $data['github_link'] = $request->input('github');
         }
+
+        // "website" -> "demo_link"
+        if (!isset($data['demo_link']) && $request->filled('website')) {
+            $data['demo_link'] = $request->input('website');
+        }
+
+        return $data;
+    }
+
+    // Transformer une chaîne "React, Node, PHP" en tableau ["React", "Node", "PHP"]
+    private function splitTechnologies(string $texte): array
+    {
+        $parties = preg_split('/[,;]+/', $texte);
+
+        $resultat = [];
+        foreach ($parties as $partie) {
+            $partie = trim($partie);
+            if ($partie !== '') {
+                $resultat[] = $partie;
+            }
+        }
+
+        return $resultat;
+    }
 }
