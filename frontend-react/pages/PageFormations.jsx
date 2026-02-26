@@ -8,38 +8,38 @@ import { formationsApi } from '../services/api.js';
  */
 function ElementFormation(props) {
   const formation = props.formation;
-  
-  let title = 'Formation';
-  if (formation.title) {
-    title = formation.title;
-  } else if (formation.name) {
-    title = formation.name;
+
+  // Construire le titre : "Licence 3 Informatique (EDN)"
+  let title = '';
+  if (formation.degree && formation.field) {
+    title = formation.degree + ' ' + formation.field;
+  } else if (formation.degree) {
+    title = formation.degree;
+  } else {
+    title = 'Formation';
   }
-  
-  let org = '';
-  if (formation.school) {
-    org = formation.school;
-  } else if (formation.organization) {
-    org = formation.organization;
-  } else if (formation.institution) {
-    org = formation.institution;
+
+  // Nom de l'établissement
+  let school = formation.school || '';
+
+  // Extraire l'année depuis la date (ex: "2025-09-01" → "2025")
+  function getYear(dateString) {
+    if (!dateString) return '';
+    return dateString.substring(0, 4);
   }
-  
-  let start = '';
-  if (formation.start_date) {
-    start = formation.start_date;
-  } else if (formation.start) {
-    start = formation.start;
-  } else if (formation.year) {
-    start = formation.year;
+
+  // Période affichée : "2025-2026" ou "2022"
+  let startYear = getYear(formation.start_date);
+  let endYear = getYear(formation.end_date);
+  let period = '';
+  if (startYear && endYear && startYear !== endYear) {
+    period = startYear + '-' + endYear;
+  } else if (startYear) {
+    period = startYear;
   }
-  
-  let end = '';
-  if (formation.end_date) {
-    end = formation.end_date;
-  } else if (formation.end) {
-    end = formation.end;
-  }
+
+  // Description (optionnelle)
+  let description = formation.description || '';
 
   return (
     <div className="relative pl-8">
@@ -48,17 +48,24 @@ function ElementFormation(props) {
       
       {/* Carte formation */}
       <div className="rounded-lg border border-cyan-500/20 bg-slate-800/50 p-4 shadow-sm hover:shadow-md hover:shadow-cyan-500/10 transition-shadow backdrop-blur-sm">
+        {/* Ligne du haut : titre + période */}
         <div className="flex items-center justify-between gap-3">
           <h3 className="text-base font-bold text-gray-100">{title}</h3>
-          <span className="text-xs text-gray-400 font-medium whitespace-nowrap">
-            {start}
-            {end && ` — ${end}`}
-          </span>
+          {period && (
+            <span className="text-xs text-cyan-400 font-semibold whitespace-nowrap bg-cyan-500/10 px-2 py-1 rounded">
+              {period}
+            </span>
+          )}
         </div>
         
-        {/* Organisation */}
-        {org && (
-          <p className="mt-1 text-sm text-gray-400">{org}</p>
+        {/* Nom de l'établissement */}
+        {school && (
+          <p className="mt-1 text-sm text-gray-400">{school}</p>
+        )}
+
+        {/* Description si elle existe */}
+        {description && (
+          <p className="mt-2 text-sm text-gray-500 italic">{description}</p>
         )}
       </div>
     </div>
@@ -92,13 +99,14 @@ export default function PageFormations() {
           
           if (composantMonte) {
             setFormations(donnees);
+            setLoading(false);
           }
         })
         .catch(function() {
-          setError('Impossible de charger les formations');
-        })
-        .finally(function() {
-          setLoading(false);
+          if (composantMonte) {
+            setError('Impossible de charger les formations');
+            setLoading(false);
+          }
         });
     }
     
