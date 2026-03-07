@@ -3,127 +3,86 @@ import { useNavigate } from 'react-router-dom';
 import { authApi } from '../../services/api.js';
 
 /**
- * FormulaireAuth - Formulaire de connexion admin 
+ * FormulaireAuth - Formulaire de connexion admin
  */
 export default function FormulaireAuth() {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    email: '',
-    password: ''
-  });
 
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  function handleChange(event) {
-    const champName = event.target.name;
-    const champValue = event.target.value;
-    
-    setFormData(function(anciennesValeurs) {
-      const nouvellesValeurs = {
-        email: anciennesValeurs.email,
-        password: anciennesValeurs.password
-      };
-      
-      if (champName === 'email') {
-        nouvellesValeurs.email = champValue;
-      } else if (champName === 'password') {
-        nouvellesValeurs.password = champValue;
-      }
-      
-      return nouvellesValeurs;
-    });
-  }
 
-  function validateForm() {
-    const email = formData.email;
-    const password = formData.password;
-    
-    const emailSansEspaces = email.trim();
-    if (emailSansEspaces === '') {
-      setError('L\'email est requis');
+  // --- Validation du formulaire ---
+
+  function validerFormulaire() {
+    if (email.trim() === '') {
+      setError("L'email est requis.");
       return false;
     }
-    
-    const emailValide = email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
-    if (!emailValide) {
-      setError('L\'email n\'est pas valide');
+
+    if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+      setError("L'email n'est pas valide.");
       return false;
     }
-    
-    const passwordSansEspaces = password.trim();
-    if (passwordSansEspaces === '') {
-      setError('Le mot de passe est requis');
+
+    if (password.trim() === '') {
+      setError('Le mot de passe est requis.');
       return false;
     }
-    
-    const longueurPassword = password.length;
-    if (longueurPassword < 8) {
-      setError('Le mot de passe doit contenir au moins 8 caractères');
+
+    if (password.length < 8) {
+      setError('Le mot de passe doit contenir au moins 8 caractères.');
       return false;
     }
-    
+
     return true;
   }
 
-  const handleSubmit = async (e) => {
+
+  // --- Récupérer le message d'erreur ---
+
+  function getMessageErreur(err) {
+    if (err.response && err.response.data && err.response.data.message) {
+      return err.response.data.message;
+    }
+    return 'Erreur de connexion.';
+  }
+
+
+  // --- Soumission du formulaire ---
+
+  async function handleSubmit(e) {
     e.preventDefault();
     setError('');
     setSuccess('');
 
-    if (!validateForm()) {
-      return;
-    }
+    if (!validerFormulaire()) return;
 
     setLoading(true);
 
     try {
-      const response = await authApi.login({
-        email: formData.email,
-        password: formData.password
-      });
+      // Appel API de connexion
+      const response = await authApi.login({ email, password });
 
-      let token = null;
-      if (response.data && response.data.token) {
-        token = response.data.token;
-      } else if (response.data && response.data.access_token) {
-        token = response.data.access_token;
-      }
-      
+      // Récupérer et stocker le token
+      const token = response.data.token || response.data.access_token;
       if (token) {
         localStorage.setItem('authToken', token);
       }
 
-      setSuccess('Connexion réussie ! Redirection en cours...');
-      setFormData({ email: '', password: '' });
-      navigate('/admin', { replace: true });
+      // Succès : redirection vers le dashboard
+      setSuccess('Connexion réussie ! Redirection...');
+      navigate('/admin/dashboard', { replace: true });
+
     } catch (err) {
-      if (err.response && err.response.data) {
-        console.error('Erreur auth:', err.response.data);
-      }
-      
-      let errorMsg = '';
-      
-      if (err.response && err.response.data) {
-        if (err.response.data.message) {
-          errorMsg = err.response.data.message;
-        } else if (err.response.data.errors && err.response.data.errors.email && err.response.data.errors.email[0]) {
-          errorMsg = err.response.data.errors.email[0];
-        } else if (err.response.data.errors && err.response.data.errors.password && err.response.data.errors.password[0]) {
-          errorMsg = err.response.data.errors.password[0];
-        }
-      }
-      
-      if (errorMsg === '') {
-        errorMsg = 'Erreur de connexion';
-      }
-      
-      setError(errorMsg);
+      setError(getMessageErreur(err));
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   return (
     <div className="w-full max-w-md mx-auto">
@@ -160,8 +119,8 @@ export default function FormulaireAuth() {
               type="email"
               id="email"
               name="email"
-              value={formData.email}
-              onChange={handleChange}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               placeholder="vous@exemple.com"
               className="w-full px-4 py-3 rounded-lg bg-slate-700/50 border border-cyan-500/20 text-gray-100 placeholder-gray-500 focus:border-cyan-400/50 focus:outline-none transition-colors"
             />
@@ -176,8 +135,8 @@ export default function FormulaireAuth() {
               type="password"
               id="password"
               name="password"
-              value={formData.password}
-              onChange={handleChange}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
               className="w-full px-4 py-3 rounded-lg bg-slate-700/50 border border-cyan-500/20 text-gray-100 placeholder-gray-500 focus:border-cyan-400/50 focus:outline-none transition-colors"
             />

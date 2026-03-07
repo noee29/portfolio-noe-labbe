@@ -34,7 +34,7 @@ class AuthController extends Controller
         $user = User::create([
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
-            'name' => explode('@', $validated['email'])[0], // Nom par défaut depuis email
+            'name' => explode('@', $validated['email'])[0],
         ]);
 
         // Token Sanctum
@@ -58,18 +58,30 @@ class AuthController extends Controller
         $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required'
+        ], [
+            'email.required' => 'L\'adresse email est requise.',
+            'email.email' => 'L\'adresse email n\'est pas valide.',
+            'password.required' => 'Le mot de passe est requis.',
         ]);
 
-        if (!Auth::attempt($credentials)) {
-            return response()->json(['message' => 'Identifiants incorrects'], 401);
-        }
-
-        /** @var User|null $user */
-        $user = Auth::user();
+        // Vérifier si l'email existe
+        $user = User::where('email', $credentials['email'])->first();
 
         if (!$user) {
-            return response()->json(['message' => "Utilisateur introuvable après l'authentification"], 500);
+            return response()->json([
+                'message' => 'Aucun compte n\'existe avec cette adresse email.'
+            ], 401);
         }
+
+        // Vérifier le mot de passe
+        if (!Hash::check($credentials['password'], $user->password)) {
+            return response()->json([
+                'message' => 'Mot de passe incorrect.'
+            ], 401);
+        }
+
+        // Authentifier l'utilisateur
+        Auth::login($user);
 
         // Token Sanctum
         $token = $user->createToken('auth_token')->plainTextToken;

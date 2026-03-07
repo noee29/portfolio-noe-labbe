@@ -32,8 +32,11 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response && error.response.status === 401) {
-      localStorage.removeItem('authToken');
-      window.location.href = '/admin';
+      // Ne pas rediriger si on est déjà sur la page de login
+      if (!window.location.pathname.startsWith('/admin')) {
+        localStorage.removeItem('authToken');
+        window.location.href = '/admin';
+      }
     }
     return Promise.reject(error);
   }

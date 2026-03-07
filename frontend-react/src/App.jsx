@@ -11,6 +11,7 @@ import PageFormations from '../pages/PageFormations.jsx'
 import PageContact from '../pages/PageContact.jsx'
 import PageAdmin from '../pages/PageAdmin.jsx'
 import PageDetailProjet from '../pages/PageDetailProjet.jsx'
+import PageDashboardAdmin from '../pages/PageDashboardAdmin.jsx'
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
             <Route path="/formations" element={<PageFormations />} />
             <Route path="/contact" element={<PageContact />} />
             <Route path="/admin" element={<PageAdmin />} />
+            <Route path="/admin/dashboard" element={<PageDashboardAdmin />} />
           </Routes>
         </main>
         <BasPage />
