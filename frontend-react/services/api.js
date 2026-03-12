@@ -116,3 +116,15 @@ export const authApi = {
   /** Récupère les informations de l'utilisateur connecté. */
   getUser: () => api.get('/user'),
 };
+
+/**
+ * Services pour le CV.
+ */
+export const cvApi = {
+  /** Récupère le CV actuel. */
+  get: () => api.get('/admin/cv'),
+  /** Upload un nouveau CV (FormData avec champ 'cv'). */
+  upload: (formData) => api.post('/admin/cv', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  }),
+};

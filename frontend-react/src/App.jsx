@@ -12,6 +12,11 @@ import PageContact from '../pages/PageContact.jsx'
 import PageAdmin from '../pages/PageAdmin.jsx'
 import PageDetailProjet from '../pages/PageDetailProjet.jsx'
 import PageDashboardAdmin from '../pages/PageDashboardAdmin.jsx'
+import PageAdminProjets from '../pages/PageAdminProjets.jsx'
+import PageAdminCompetences from '../pages/PageAdminCompetences.jsx'
+import PageAdminFormations from '../pages/PageAdminFormations.jsx'
+import PageAdminContacts from '../pages/PageAdminContacts.jsx'
+import PageAdminCV from '../pages/PageAdminCV.jsx'
 
 function App() {
   return (
@@ -28,6 +33,11 @@ function App() {
             <Route path="/contact" element={<PageContact />} />
             <Route path="/admin" element={<PageAdmin />} />
             <Route path="/admin/dashboard" element={<PageDashboardAdmin />} />
+            <Route path="/admin/projets" element={<PageAdminProjets />} />
+            <Route path="/admin/competences" element={<PageAdminCompetences />} />
+            <Route path="/admin/formations" element={<PageAdminFormations />} />
+            <Route path="/admin/contacts" element={<PageAdminContacts />} />
+            <Route path="/admin/cv" element={<PageAdminCV />} />
           </Routes>
         </main>
         <BasPage />

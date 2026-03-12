@@ -6,6 +6,7 @@ use App\Http\Controllers\API\SkillController;
 use App\Http\Controllers\API\FormationController;
 use App\Http\Controllers\API\ContactController;
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\CVController;
 
 /*
 Routes publiques
@@ -69,4 +70,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/admin/contacts', [ContactController::class, 'index']);
     Route::patch('/admin/contacts/{contact}/read', [ContactController::class, 'markAsRead']);
     Route::delete('/admin/contacts/{contact}', [ContactController::class, 'destroy']);
+
+
+    /*
+    CV (Admin)
+    */
+    Route::get('/admin/cv', [CVController::class, 'show']);
+    Route::post('/admin/cv', [CVController::class, 'store']);
 });
