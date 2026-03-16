@@ -4,9 +4,11 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Project;
+use App\Models\ProjectImage;
 use Illuminate\Http\Request;
 use App\Http\Requests\ProjectStoreRequest;
 use App\Http\Requests\ProjectUpdateRequest;
+use Illuminate\Support\Facades\Storage;
 
 class ProjectController extends Controller
 {
@@ -112,6 +114,60 @@ class ProjectController extends Controller
             return response()->json(['message' => 'Ordre mis à jour']);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Erreur de connexion à la base de données'], 500);
+        }
+    }
+
+    // Ajouter des captures image/video a un projet
+    public function addMedia(Request $request, Project $project)
+    {
+        try {
+            $request->validate([
+                'files' => 'required|array|min:1',
+                'files.*' => 'file|mimes:png,jpg,jpeg,mp4|max:20480',
+            ]);
+
+            $ordre = $project->images()->count();
+
+            foreach ($request->file('files') as $fichier) {
+                $mime = $fichier->getMimeType();
+                $type = 'image';
+                if (str_starts_with((string) $mime, 'video/')) {
+                    $type = 'video';
+                }
+
+                $path = $fichier->store('project-media', 'public');
+
+                ProjectImage::create([
+                    'project_id' => $project->id,
+                    'file_path' => $path,
+                    'file_type' => $type,
+                    'order' => $ordre,
+                ]);
+
+                $ordre++;
+            }
+
+            $project->load('images');
+            return response()->json($project);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Erreur lors de l\'upload des medias'], 500);
+        }
+    }
+
+    // Supprimer un media d'un projet
+    public function deleteMedia(Project $project, ProjectImage $media)
+    {
+        try {
+            if ($media->project_id !== $project->id) {
+                return response()->json(['message' => 'Media introuvable pour ce projet'], 404);
+            }
+
+            Storage::disk('public')->delete($media->file_path);
+            $media->delete();
+
+            return response()->json(['message' => 'Media supprime']);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Erreur lors de la suppression du media'], 500);
         }
     }
 

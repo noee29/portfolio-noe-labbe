@@ -43,6 +43,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/admin/projects', [ProjectController::class, 'store']);
     Route::put('/admin/projects/{project}', [ProjectController::class, 'update']);
     Route::delete('/admin/projects/{project}', [ProjectController::class, 'destroy']);
+    Route::post('/admin/projects/{project}/media', [ProjectController::class, 'addMedia']);
+    Route::delete('/admin/projects/{project}/media/{media}', [ProjectController::class, 'deleteMedia']);
 
     // Reorder Projects
     Route::post('/admin/projects/reorder', [ProjectController::class, 'reorder']);

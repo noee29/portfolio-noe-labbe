@@ -54,11 +54,32 @@ export const projectsApi = {
   /** Récupère un projet par identifiant. */
   getOne: (id) => api.get(`/projects/${id}`),
   /** Crée un projet (zone admin, nécessite token). */
-  create: (data) => api.post('/admin/projects', data),
+  create: (data) => {
+    if (data instanceof FormData) {
+      return api.post('/admin/projects', data, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+    }
+    return api.post('/admin/projects', data);
+  },
   /** Met à jour un projet (zone admin). */
-  update: (id, data) => api.put(`/admin/projects/${id}`, data),
+  update: (id, data) => {
+    if (data instanceof FormData) {
+      data.append('_method', 'PUT');
+      return api.post(`/admin/projects/${id}`, data, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+    }
+    return api.put(`/admin/projects/${id}`, data);
+  },
   /** Supprime un projet (zone admin). */
   delete: (id) => api.delete(`/admin/projects/${id}`),
+  /** Ajoute des medias (png/jpg/mp4) a un projet. */
+  addMedia: (projectId, formData) => api.post(`/admin/projects/${projectId}/media`, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  }),
+  /** Supprime un media de projet. */
+  deleteMedia: (projectId, mediaId) => api.delete(`/admin/projects/${projectId}/media/${mediaId}`),
 };
 
 /**

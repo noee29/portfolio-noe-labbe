@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * Modèle ProjectImage : captures d'écran et vidéos associées à un projet.
@@ -23,6 +24,18 @@ class ProjectImage extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
+    protected $appends = [
+        'file_url',
+    ];
+
+    /**
+     * URL publique du fichier media.
+     */
+    public function getFileUrlAttribute()
+    {
+        return Storage::url($this->file_path);
+    }
 
     /**
      * Retourne le projet auquel appartient cette image.
