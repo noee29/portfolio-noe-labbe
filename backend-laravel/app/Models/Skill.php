@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * Modèle Skill : compétences avec niveau et catégorie.
@@ -24,6 +25,26 @@ class Skill extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
+    protected $appends = [
+        'icon_url',
+    ];
+
+    /**
+     * Retourne l'URL publique de l'icone.
+     */
+    public function getIconUrlAttribute()
+    {
+        if (!$this->icon) {
+            return null;
+        }
+
+        if (str_starts_with($this->icon, 'http://') || str_starts_with($this->icon, 'https://')) {
+            return $this->icon;
+        }
+
+        return Storage::url($this->icon);
+    }
 
     /**
      * Filtre les compétences par catégorie.

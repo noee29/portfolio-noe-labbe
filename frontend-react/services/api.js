@@ -89,9 +89,24 @@ export const skillsApi = {
   /** Récupère toutes les compétences. */
   getAll: () => api.get('/skills'),
   /** Crée une compétence (admin). */
-  create: (data) => api.post('/admin/skills', data),
+  create: (data) => {
+    if (data instanceof FormData) {
+      return api.post('/admin/skills', data, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+    }
+    return api.post('/admin/skills', data);
+  },
   /** Met à jour une compétence (admin). */
-  update: (id, data) => api.put(`/admin/skills/${id}`, data),
+  update: (id, data) => {
+    if (data instanceof FormData) {
+      data.append('_method', 'PUT');
+      return api.post(`/admin/skills/${id}`, data, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+    }
+    return api.put(`/admin/skills/${id}`, data);
+  },
   /** Supprime une compétence (admin). */
   delete: (id) => api.delete(`/admin/skills/${id}`),
 };
