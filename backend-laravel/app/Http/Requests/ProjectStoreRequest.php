@@ -27,11 +27,11 @@ class ProjectStoreRequest extends FormRequest
             'title'         => ['required', 'string', 'max:255'],
             'description'   => ['required', 'string'],
             'technologies'  => ['nullable', 'array'],
-            'technologies.*'=> ['string', 'max:255'],
+            'technologies.*'=> ['string', 'max:255', 'distinct'],
             'github_link'   => ['nullable', 'url'],
             'demo_link'     => ['nullable', 'url'],
             'featured'      => ['nullable', 'boolean'],
-            'order'         => ['nullable', 'integer'],
+            'order'         => ['nullable', 'integer', 'min:0'],
             'image'         => ['nullable', 'image', 'max:2048'],
         ];
     }

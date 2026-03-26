@@ -122,6 +122,18 @@ export default function PageAdminProjets() {
     return payload;
   }
 
+  function isValidHttpUrl(value) {
+    try {
+      const url = new URL(value);
+      if (url.protocol === 'http:' || url.protocol === 'https:') {
+        return true;
+      }
+      return false;
+    } catch {
+      return false;
+    }
+  }
+
   async function handleSubmit(event) {
     event.preventDefault();
     setMessage('');
@@ -131,6 +143,16 @@ export default function PageAdminProjets() {
     const description = form.description.trim();
     if (title === '' || description === '') {
       setError('Titre et description sont obligatoires.');
+      return;
+    }
+
+    if (form.github_link.trim() !== '' && !isValidHttpUrl(form.github_link.trim())) {
+      setError('Le lien GitHub doit etre une URL valide (http ou https).');
+      return;
+    }
+
+    if (form.demo_link.trim() !== '' && !isValidHttpUrl(form.demo_link.trim())) {
+      setError('Le lien Demo doit etre une URL valide (http ou https).');
       return;
     }
 

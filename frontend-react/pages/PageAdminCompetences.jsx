@@ -215,7 +215,24 @@ export default function PageAdminCompetences() {
               onChange={function (event) {
                 const files = event.target.files;
                 if (files && files.length > 0) {
-                  setIconFile(files[0]);
+                  const file = files[0];
+                  const isAllowedType = file.type === 'image/png' || file.type === 'image/jpg' || file.type === 'image/jpeg';
+                  const isAllowedSize = file.size <= 2 * 1024 * 1024;
+
+                  if (!isAllowedType) {
+                    setError('Format icone invalide. Utilise PNG ou JPG.');
+                    setIconFile(null);
+                    return;
+                  }
+
+                  if (!isAllowedSize) {
+                    setError('Icone trop lourde. Taille max: 2 Mo.');
+                    setIconFile(null);
+                    return;
+                  }
+
+                  setError('');
+                  setIconFile(file);
                 } else {
                   setIconFile(null);
                 }

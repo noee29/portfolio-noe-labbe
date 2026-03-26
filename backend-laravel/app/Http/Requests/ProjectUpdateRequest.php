@@ -27,11 +27,11 @@ class ProjectUpdateRequest extends FormRequest
             'title'         => ['sometimes', 'string', 'max:255'],
             'description'   => ['sometimes', 'string'],
             'technologies'  => ['sometimes', 'array'],
-            'technologies.*'=> ['string', 'max:255'],
+            'technologies.*'=> ['string', 'max:255', 'distinct'],
             'github_link'   => ['sometimes', 'nullable', 'url'],
             'demo_link'     => ['sometimes', 'nullable', 'url'],
             'featured'      => ['sometimes', 'boolean'],
-            'order'         => ['sometimes', 'integer'],
+            'order'         => ['sometimes', 'integer', 'min:0'],
             'image'         => ['sometimes', 'nullable', 'image', 'max:2048'],
         ];
     }
