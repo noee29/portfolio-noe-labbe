@@ -1,12 +1,39 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import ConteneurPage from '../layout/ConteneurPage.jsx';
+import { cvApi } from '../../services/api.js';
 
 /**
  * EnTeteNavigation - Header avec navigation
  */
 export default function EnTeteNavigation() {
   const [menuOuvert, setMenuOuvert] = useState(false);
+  const [cvUrl, setCvUrl] = useState('/CV/CV Noé LABBÉ Portfolio.pdf');
+  const [cvFilename, setCvFilename] = useState('CV Noé LABBÉ Portfolio.pdf');
+
+  useEffect(function () {
+    chargerCvPublic();
+  }, []);
+
+  async function chargerCvPublic() {
+    try {
+      const response = await cvApi.get();
+      if (response && response.data) {
+        const url = response.data.url;
+        const file = response.data.file;
+
+        if (url) {
+          setCvUrl(url);
+        }
+
+        if (file) {
+          setCvFilename(file);
+        }
+      }
+    } catch {
+      // En cas d'erreur, on garde les valeurs par défaut
+    }
+  }
   
   function basculerMenu() {
     setMenuOuvert(!menuOuvert);
@@ -53,8 +80,8 @@ export default function EnTeteNavigation() {
         </nav>
         <div className="hidden md:block">
           <a 
-            href="/CV/CV Noé LABBÉ Portfolio.pdf" 
-            download="CV Noé LABBÉ Portfolio.pdf"
+            href={cvUrl}
+            download={cvFilename}
             className="text-sm font-semibold px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white hover:shadow-lg hover:shadow-cyan-500/30 transition-all hover:scale-105 inline-flex items-center gap-2"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -105,8 +132,8 @@ export default function EnTeteNavigation() {
               Contact
             </Link>
             <a 
-              href="/CV/CV Noé LABBÉ Portfolio.pdf" 
-              download="CV Noé LABBÉ Portfolio.pdf"
+              href={cvUrl}
+              download={cvFilename}
               className="text-sm font-semibold px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white inline-flex items-center gap-2" 
               onClick={fermerMenu}
             >

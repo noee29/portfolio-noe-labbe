@@ -19,6 +19,8 @@ Route::get('/skills', [SkillController::class, 'index']);
 
 Route::get('/formations', [FormationController::class, 'index']);
 
+Route::get('/cv', [CVController::class, 'show']);
+
 Route::post('/contact', [ContactController::class, 'store']);
 
 

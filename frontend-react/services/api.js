@@ -158,7 +158,11 @@ export const authApi = {
  */
 export const cvApi = {
   /** Récupère le CV actuel. */
-  get: () => api.get('/admin/cv'),
+  get: () => api.get('/cv', {
+    params: {
+      t: Date.now(),
+    },
+  }),
   /** Upload un nouveau CV (FormData avec champ 'cv'). */
   upload: (formData) => api.post('/admin/cv', formData, {
     headers: { 'Content-Type': 'multipart/form-data' }
