@@ -11,7 +11,11 @@ use Illuminate\Support\Facades\Log;
 
 class ContactController extends Controller
 {
-    // Récupérer tous les messages de contact
+    /**
+     * Liste tous les messages de contact pour l'administration.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function index()
     {
         try {
@@ -62,7 +66,12 @@ class ContactController extends Controller
         }
     }
 
-    // Supprimer un message de contact
+    /**
+     * Supprime un message de contact depuis l'admin.
+     *
+     * @param Contact $contact
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function destroy(Contact $contact)
     {
         try {
@@ -73,7 +82,12 @@ class ContactController extends Controller
         }
     }
 
-    // Marquer un message comme lu
+    /**
+     * Marque un message de contact comme lu dans l'administration.
+     *
+     * @param Contact $contact
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function markAsRead(Contact $contact)
     {
         try {

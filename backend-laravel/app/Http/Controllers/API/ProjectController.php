@@ -34,7 +34,15 @@ class ProjectController extends Controller
         }
     }
 
-    // Créer un nouveau projet
+    /**
+     * Crée un projet depuis le dashboard admin.
+     *
+     * Valide les données, normalise les anciens noms de champs, convertit
+     * les technologies en tableau et positionne le projet en fin de liste.
+     *
+     * @param ProjectStoreRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function store(ProjectStoreRequest $request)
     {
         try {
@@ -62,7 +70,16 @@ class ProjectController extends Controller
         }
     }
 
-    // Modifier un projet existant
+    /**
+     * Met à jour un projet depuis le dashboard admin.
+     *
+     * Gère aussi la compatibilité avec les anciens noms de champs et
+     * le remplacement de l'image principale si un nouveau fichier est envoyé.
+     *
+     * @param ProjectUpdateRequest $request
+     * @param Project $project
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function update(ProjectUpdateRequest $request, Project $project)
     {
         try {
@@ -87,7 +104,12 @@ class ProjectController extends Controller
         }
     }
 
-    // Supprimer un projet
+    /**
+     * Supprime un projet depuis le dashboard admin.
+     *
+     * @param Project $project
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function destroy(Project $project)
     {
         try {
@@ -98,7 +120,15 @@ class ProjectController extends Controller
         }
     }
 
-    // Changer l'ordre d'affichage des projets
+    /**
+     * Réordonne les projets dans le dashboard admin.
+     *
+     * Attend un tableau d'identifiants dans l'ordre souhaité et met à jour
+     * la colonne "order" de chaque projet.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function reorder(Request $request)
     {
         try {
@@ -117,7 +147,13 @@ class ProjectController extends Controller
         }
     }
 
-    // Ajouter des captures image/video a un projet
+    /**
+     * Ajoute des médias (images/vidéos) à un projet depuis l'admin.
+     *
+     * @param Request $request
+     * @param Project $project
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function addMedia(Request $request, Project $project)
     {
         try {
@@ -154,7 +190,15 @@ class ProjectController extends Controller
         }
     }
 
-    // Supprimer un media d'un projet
+    /**
+     * Supprime un média d'un projet depuis l'admin.
+     *
+     * Vérifie que le média appartient bien au projet ciblé
+     *
+     * @param Project $project
+     * @param ProjectImage $media
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function deleteMedia(Project $project, ProjectImage $media)
     {
         try {
@@ -171,7 +215,13 @@ class ProjectController extends Controller
         }
     }
 
-
+    /**
+     * Harmonise les anciens noms de champs envoyés par le front.
+     *
+     * @param array $data
+     * @param Request $request
+     * @return array
+     */
     private function fixOldFieldNames(array $data, Request $request): array
     {
         // "technos" -> "technologies"
@@ -192,7 +242,12 @@ class ProjectController extends Controller
         return $data;
     }
 
-    // Transformer une chaîne "React, Node, PHP" en tableau ["React", "Node", "PHP"]
+    /**
+     * Transforme une liste de technologies en chaîne en tableau de valeurs.
+     *
+     * @param string $texte
+     * @return array
+     */
     private function splitTechnologies(string $texte): array
     {
         $parties = preg_split('/[,;]+/', $texte);

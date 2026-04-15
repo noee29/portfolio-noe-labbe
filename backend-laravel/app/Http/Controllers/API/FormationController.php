@@ -20,7 +20,12 @@ class FormationController extends Controller
         }
     }
 
-    // Créer une nouvelle formation
+    /**
+     * Crée une formation depuis le dashboard admin.
+     *
+     * @param FormationStoreRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function store(FormationStoreRequest $request)
     {
         try {
@@ -31,7 +36,13 @@ class FormationController extends Controller
         }
     }
 
-    // Modifier une formation
+    /**
+     * Met à jour une formation depuis le dashboard admin.
+     *
+     * @param FormationUpdateRequest $request
+     * @param Formation $formation
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function update(FormationUpdateRequest $request, Formation $formation)
     {
         try {
@@ -42,7 +53,12 @@ class FormationController extends Controller
         }
     }
 
-    // Supprimer une formation
+    /**
+     * Supprime une formation depuis le dashboard admin.
+     *
+     * @param Formation $formation
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function destroy(Formation $formation)
     {
         try {

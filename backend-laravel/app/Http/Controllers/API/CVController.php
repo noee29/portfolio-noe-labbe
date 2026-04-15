@@ -8,7 +8,13 @@ use Illuminate\Support\Facades\Storage;
 
 class CVController extends Controller
 {
-    // Récupérer le CV actuel
+    /**
+     * Récupère le CV publié.
+     *
+     * Utilisé côté admin pour prévisualiser le fichier actif, et côté public pour exposer le CV.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function show()
     {
         // Chercher le fichier CV dans storage/app/public/cv/
@@ -27,7 +33,14 @@ class CVController extends Controller
         ]);
     }
 
-    // Uploader un nouveau CV
+    /**
+     * Remplace le CV existant par un nouveau fichier PDF.
+     *
+     * Supprime les anciens fichiers avant de stocker la nouvelle version.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function store(Request $request)
     {
         $request->validate([

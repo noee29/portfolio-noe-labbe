@@ -7,6 +7,13 @@ use Illuminate\Http\Request;
 
 class AdminMiddleware
 {
+    /**
+     * Autorise l'accès uniquement aux utilisateurs ayant le role admin.
+     *
+     * @param Request $request
+     * @param Closure $next
+     * @return mixed
+     */
     public function handle(Request $request, Closure $next) {
     $user = $request->user();
 

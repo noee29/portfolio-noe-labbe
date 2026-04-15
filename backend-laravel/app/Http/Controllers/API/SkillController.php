@@ -21,7 +21,12 @@ class SkillController extends Controller
         }
     }
 
-    // Créer une nouvelle compétence
+    /**
+     * Crée une compétence depuis le dashboard admin.
+     *
+     * @param SkillStoreRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function store(SkillStoreRequest $request)
     {
         try {
@@ -38,7 +43,15 @@ class SkillController extends Controller
         }
     }
 
-    // Modifier une compétence
+    /**
+     * Met à jour une compétence depuis le dashboard admin.
+     *
+     * Si une nouvelle icône est envoyée, l'ancienne est supprimée du disque.
+     *
+     * @param SkillUpdateRequest $request
+     * @param Skill $skill
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function update(SkillUpdateRequest $request, Skill $skill)
     {
         try {
@@ -58,7 +71,12 @@ class SkillController extends Controller
         }
     }
 
-    // Supprimer une compétence
+    /**
+     * Supprime une compétence depuis le dashboard admin.
+     *
+     * @param Skill $skill
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function destroy(Skill $skill)
     {
         try {
