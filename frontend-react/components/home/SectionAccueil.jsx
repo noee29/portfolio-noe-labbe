@@ -30,7 +30,11 @@ export default function SectionAccueil() {
               Qui suis-je ?
             </h1>
             <p className="text-lg text-gray-300 max-w-2xl mb-8 leading-relaxed">
-              Bonjour, je m’appelle Noé Labbé, j’ai 21 ans et je suis étudiant en L3 informatique à l'Université Catholique de Lille (EDN). Je souhaite m’orienter vers les métiers de la data.
+              Bonjour, je m'appelle Noé LABBÉ, j'ai 21 ans.
+              <br />
+              Actuellement je suis en 3ème année de Licence Informatique parcours Data, à l'Université Catholique de Lille (EDN).
+              <br />
+              Je recherche une alternance de 2 ans dans le domaine de la data afin de réaliser mes 2 années de Master en alternance.
             </p>
             <motion.div
               className="flex flex-col sm:flex-row items-center lg:items-start gap-4"
@@ -64,6 +68,72 @@ export default function SectionAccueil() {
             </div>
           </motion.div>
         </div>
+
+        <motion.div
+          className="mt-16 grid grid-cols-1 gap-8 max-w-6xl"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.5, ease: 'easeOut' }}
+        >
+          <div className="rounded-2xl border border-emerald-800/50 bg-slate-900/60 p-7 sm:p-8">
+            <h2 className="text-base sm:text-lg font-bold tracking-wide uppercase text-emerald-300 mb-5">
+              Disponibilité alternance
+            </h2>
+            <ul className="space-y-3 text-base sm:text-lg text-gray-200">
+              <li><span className="text-emerald-200 font-semibold">Date de début :</span> Septembre 2026</li>
+              <li><span className="text-emerald-200 font-semibold">Durée :</span> 2 ans</li>
+              <li><span className="text-emerald-200 font-semibold">Localisation :</span> Lille</li>
+              <li><span className="text-emerald-200 font-semibold">Rythme :</span> 2 jours école / 3 jours entreprise</li>
+            </ul>
+          </div>
+
+          <div className="rounded-2xl border border-cyan-800/50 bg-slate-900/60 p-7 sm:p-8">
+            <h2 className="text-base sm:text-lg font-bold tracking-wide uppercase text-cyan-300 mb-5">
+              Ce qui me définit
+            </h2>
+            <ul className="space-y-3">
+              <li className="px-4 py-2 rounded-full border border-cyan-500/40 bg-cyan-500/10 text-cyan-100 text-base w-fit">Rigoureux</li>
+              <li className="px-4 py-2 rounded-full border border-cyan-500/40 bg-cyan-500/10 text-cyan-100 text-base w-fit">Organisé</li>
+              <li className="px-4 py-2 rounded-full border border-cyan-500/40 bg-cyan-500/10 text-cyan-100 text-base w-fit">Autonome</li>
+              <li className="px-4 py-2 rounded-full border border-cyan-500/40 bg-cyan-500/10 text-cyan-100 text-base w-fit">Esprit d'équipe</li>
+            </ul>
+          </div>
+
+          <div className="rounded-2xl border border-teal-800/50 bg-slate-900/60 p-7 sm:p-8">
+            <h2 className="text-base sm:text-lg font-bold tracking-wide uppercase text-teal-300 mb-5">
+              Mes centres d'intérêt
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              <div className="rounded-lg border border-teal-500/30 bg-slate-950/50 overflow-hidden">
+                <img
+                  src="https://images.pexels.com/photos/2402777/pexels-photo-2402777.jpeg?auto=compress&cs=tinysrgb&w=600"
+                  alt="Course a pied"
+                  className="w-full h-44 object-cover"
+                  loading="lazy"
+                />
+                <p className="text-base text-teal-100 px-4 py-3">Course à pied</p>
+              </div>
+              <div className="rounded-lg border border-teal-500/30 bg-slate-950/50 overflow-hidden">
+                <img
+                  src="https://images.pexels.com/photos/114296/pexels-photo-114296.jpeg?auto=compress&cs=tinysrgb&w=600"
+                  alt="Football"
+                  className="w-full h-44 object-cover"
+                  loading="lazy"
+                />
+                <p className="text-base text-teal-100 px-4 py-3">Football</p>
+              </div>
+              <div className="rounded-lg border border-teal-500/30 bg-slate-950/50 overflow-hidden">
+                <img
+                  src="https://images.pexels.com/photos/36227708/pexels-photo-36227708.jpeg?auto=compress&cs=tinysrgb&w=600"
+                  alt="Padel"
+                  className="w-full h-44 object-cover object-[50%_35%]"
+                  loading="lazy"
+                />
+                <p className="text-base text-teal-100 px-4 py-3">Padel</p>
+              </div>
+            </div>
+          </div>
+        </motion.div>
       </ConteneurPage>
     </section>
   );
