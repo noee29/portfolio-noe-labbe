@@ -99,6 +99,26 @@ export default function SectionAccueil() {
             </ul>
           </div>
 
+          <div className="rounded-2xl border border-indigo-800/50 bg-slate-900/60 p-7 sm:p-8">
+            <h2 className="text-base sm:text-lg font-bold tracking-wide uppercase text-indigo-300 mb-5">
+              Langues
+            </h2>
+            <ul className="space-y-3 text-base sm:text-lg text-gray-200">
+              <li className="flex items-center justify-between rounded-lg border border-indigo-500/30 bg-indigo-500/5 px-4 py-3">
+                <span className="text-indigo-200 font-semibold">Français</span>
+                <span className="text-sm font-semibold rounded-full border border-indigo-400/40 bg-indigo-400/10 px-3 py-1 text-indigo-100">Maternelle</span>
+              </li>
+              <li className="flex items-center justify-between rounded-lg border border-indigo-500/30 bg-indigo-500/5 px-4 py-3">
+                <span className="text-indigo-200 font-semibold">Anglais</span>
+                <span className="text-sm font-semibold rounded-full border border-indigo-400/40 bg-indigo-400/10 px-3 py-1 text-indigo-100">B1</span>
+              </li>
+              <li className="flex items-center justify-between rounded-lg border border-indigo-500/30 bg-indigo-500/5 px-4 py-3">
+                <span className="text-indigo-200 font-semibold">Espagnol</span>
+                <span className="text-sm font-semibold rounded-full border border-indigo-400/40 bg-indigo-400/10 px-3 py-1 text-indigo-100">B1</span>
+              </li>
+            </ul>
+          </div>
+
           <div className="rounded-2xl border border-teal-800/50 bg-slate-900/60 p-7 sm:p-8">
             <h2 className="text-base sm:text-lg font-bold tracking-wide uppercase text-teal-300 mb-5">
               Mes centres d'intérêt

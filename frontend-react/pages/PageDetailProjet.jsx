@@ -14,6 +14,8 @@ export default function PageDetailProjet() {
   var [error, setError] = useState('');
   var [mediaOuvert, setMediaOuvert] = useState(null);
   var [indexMedia, setIndexMedia] = useState(0);
+  var apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+  var backendOrigin = apiBaseUrl.replace(/\/api\/?$/, '');
 
   // Charger le projet
   useEffect(function () {
@@ -28,9 +30,54 @@ export default function PageDetailProjet() {
     return media.file_type === 'video';
   }
 
-  // Chemin vers le fichier dans le dossier Assets
-  function cheminMedia(filePath) {
-    return '/' + filePath;
+  // Résout l'URL d'un média quelle que soit sa source (storage Laravel, URL absolue, ancien dossier Assets)
+  function cheminMedia(media) {
+    if (!media) {
+      return '';
+    }
+
+    var filePath = '';
+    if (typeof media.file_path === 'string') {
+      filePath = media.file_path;
+    }
+
+    // Compatibilite anciens projets: medias stockes dans frontend/public/Assets
+    if (filePath.startsWith('Assets/')) {
+      return '/' + filePath;
+    }
+
+    if (filePath.startsWith('/Assets/')) {
+      return filePath;
+    }
+
+    if (/^https?:\/\//i.test(filePath)) {
+      return filePath;
+    }
+
+    if (typeof media.file_url === 'string' && media.file_url !== '') {
+      if (/^https?:\/\//i.test(media.file_url)) {
+        return media.file_url;
+      }
+
+      if (media.file_url.startsWith('/Assets/')) {
+        return media.file_url;
+      }
+
+      return backendOrigin + media.file_url;
+    }
+
+    if (filePath === '') {
+      return '';
+    }
+
+    if (filePath.startsWith('/')) {
+      if (filePath.startsWith('/storage/')) {
+        return backendOrigin + filePath;
+      }
+      return filePath;
+    }
+
+    return backendOrigin + '/storage/' + filePath;
   }
 
   // --- Chargement ---
@@ -101,9 +148,9 @@ export default function PageDetailProjet() {
       return null;
     }
     if (estVideo(mediaOuvert)) {
-      return <video src={cheminMedia(mediaOuvert.file_path)} controls autoPlay className="w-full max-h-[85vh] rounded-lg" />;
+      return <video src={cheminMedia(mediaOuvert)} controls autoPlay className="w-full max-h-[85vh] rounded-lg" />;
     }
-    return <img src={cheminMedia(mediaOuvert.file_path)} alt="Capture" className="w-full max-h-[85vh] object-contain rounded-lg" />;
+    return <img src={cheminMedia(mediaOuvert)} alt="Capture" className="w-full max-h-[85vh] object-contain rounded-lg" />;
   }
 
   return (
@@ -168,7 +215,7 @@ export default function PageDetailProjet() {
                   );
                 } else {
                   contenuMedia = (
-                    <img src={cheminMedia(media.file_path)} alt={'Capture ' + (media.order + 1)}
+                    <img src={cheminMedia(media)} alt={'Capture ' + (media.order + 1)}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform" loading="lazy" />
                   );
                 }
