@@ -3,7 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { authApi } from '../../services/api.js';
 
 /**
- * FormulaireAuth - Formulaire de connexion admin
+ * FormulaireAuth - Connexion admin.
+ *
+ * Rôle : valider les champs, appeler /login, stocker le token,
+ * puis rediriger vers le dashboard.
  */
 export default function FormulaireAuth() {
   const navigate = useNavigate();
@@ -67,7 +70,7 @@ export default function FormulaireAuth() {
       // Appel API de connexion
       const response = await authApi.login({ email, password });
 
-      // Récupérer et stocker le token
+      // On garde le token pour les prochaines requêtes admin.
       const token = response.data.token || response.data.access_token;
       if (token) {
         localStorage.setItem('authToken', token);

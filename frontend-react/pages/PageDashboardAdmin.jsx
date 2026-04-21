@@ -2,6 +2,11 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { authApi } from '../services/api.js';
 
+/**
+ * Dashboard admin principal.
+ *
+ * Contient aussi l'action de déconnexion.
+ */
 export default function PageDashboardAdmin() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -45,11 +50,13 @@ export default function PageDashboardAdmin() {
     setError('');
 
     try {
+      // Déconnexion côté backend.
       await authApi.logout();
     } catch {
       // Même si l'API échoue, on supprime la session locale.
     }
 
+    // Déconnexion côté frontend.
     localStorage.removeItem('authToken');
     setLoading(false);
     navigate('/admin');

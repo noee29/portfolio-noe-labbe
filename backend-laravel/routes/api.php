@@ -25,6 +25,8 @@ Route::post('/contact', [ContactController::class, 'store']);
 
 
 // Auth
+// - /register : inscription + token
+// - /login    : connexion + token
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -36,6 +38,8 @@ Routes Admin protégées (Sanctum)
 Route::middleware('auth:sanctum')->group(function () {
 
     // Auth actions
+    // - /logout : supprime les tokens de session
+    // - /user   : retourne l'utilisateur connecté
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'user']);
 
