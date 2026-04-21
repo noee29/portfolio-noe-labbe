@@ -24,8 +24,10 @@ class SkillUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'  => ['sometimes', 'string', 'max:255'],
-            'level' => ['sometimes', 'integer', 'between:1,100'],
+            'name'     => ['sometimes', 'string', 'max:255'],
+            'category' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'level'    => ['sometimes', 'nullable', 'integer', 'between:1,100'],
+            'icon'     => ['sometimes', 'nullable', 'file', 'mimes:png,jpg,jpeg', 'max:2048'],
         ];
     }
 }

@@ -27,6 +27,7 @@ class ContactUpdateRequest extends FormRequest
             'name'    => ['sometimes', 'string', 'max:255'],
             'email'   => ['sometimes', 'email', 'max:255'],
             'message' => ['sometimes', 'string', 'min:10'],
+            'read'    => ['sometimes', 'boolean'],
         ];
     }
 }

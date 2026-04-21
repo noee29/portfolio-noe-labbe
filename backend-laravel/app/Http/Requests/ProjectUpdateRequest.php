@@ -24,12 +24,15 @@ class ProjectUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title'       => ['sometimes', 'string', 'max:255'],
-            'description' => ['sometimes', 'string'],
-            'technos'     => ['sometimes', 'string'],
-            'github'      => ['sometimes', 'nullable', 'url'],
-            'website'     => ['sometimes', 'nullable', 'url'],
-            'image'       => ['sometimes', 'nullable', 'image', 'max:2048'],
+            'title'         => ['sometimes', 'string', 'max:255'],
+            'description'   => ['sometimes', 'string'],
+            'technologies'  => ['sometimes', 'array'],
+            'technologies.*'=> ['string', 'max:255', 'distinct'],
+            'github_link'   => ['sometimes', 'nullable', 'url'],
+            'demo_link'     => ['sometimes', 'nullable', 'url'],
+            'featured'      => ['sometimes', 'boolean'],
+            'order'         => ['sometimes', 'integer', 'min:0'],
+            'image'         => ['sometimes', 'nullable', 'image', 'max:2048'],
         ];
     }
 }

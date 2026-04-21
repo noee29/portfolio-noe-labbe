@@ -24,8 +24,10 @@ class SkillStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'  => ['required', 'string', 'max:255'],
-            'level' => ['required', 'integer', 'between:1,100'],
+            'name'     => ['required', 'string', 'max:255'],
+            'category' => ['nullable', 'string', 'max:255'],
+            'level'    => ['nullable', 'integer', 'between:1,100'],
+            'icon'     => ['nullable', 'file', 'mimes:png,jpg,jpeg', 'max:2048'],
         ];
     }
 }

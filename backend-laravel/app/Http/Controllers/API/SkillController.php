@@ -3,57 +3,87 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Skill;
 use App\Http\Requests\SkillStoreRequest;
 use App\Http\Requests\SkillUpdateRequest;
+use Illuminate\Support\Facades\Storage;
 
 class SkillController extends Controller
 {
-    /**
-     * Retourne toutes les compétences.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
+    // Récupérer toutes les compétences
     public function index()
     {
-        return response()->json(Skill::all());
+        try {
+            $skills = Skill::all();
+            return response()->json($skills);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Erreur de connexion à la base de données'], 500);
+        }
     }
 
     /**
-     * Crée une compétence à partir des données validées.
+     * Crée une compétence depuis le dashboard admin.
      *
-     * @param SkillStoreRequest $request Données de compétence
+     * @param SkillStoreRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function store(SkillStoreRequest $request)
     {
-        $skill = Skill::create($request->validated());
-        return response()->json($skill, 201);
+        try {
+            $data = $request->validated();
+
+            if ($request->hasFile('icon')) {
+                $data['icon'] = $request->file('icon')->store('skills-icons', 'public');
+            }
+
+            $skill = Skill::create($data);
+            return response()->json($skill, 201);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Erreur de connexion à la base de données'], 500);
+        }
     }
 
     /**
-     * Met à jour une compétence existante.
+     * Met à jour une compétence depuis le dashboard admin.
      *
-     * @param SkillUpdateRequest $request Données mises à jour
-     * @param Skill $skill Modèle à modifier
+     * Si une nouvelle icône est envoyée, l'ancienne est supprimée du disque.
+     *
+     * @param SkillUpdateRequest $request
+     * @param Skill $skill
      * @return \Illuminate\Http\JsonResponse
      */
     public function update(SkillUpdateRequest $request, Skill $skill)
     {
-        $skill->update($request->validated());
-        return response()->json($skill);
+        try {
+            $data = $request->validated();
+
+            if ($request->hasFile('icon')) {
+                if ($skill->icon) {
+                    Storage::disk('public')->delete($skill->icon);
+                }
+                $data['icon'] = $request->file('icon')->store('skills-icons', 'public');
+            }
+
+            $skill->update($data);
+            return response()->json($skill);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Erreur de connexion à la base de données'], 500);
+        }
     }
 
     /**
-     * Supprime une compétence.
+     * Supprime une compétence depuis le dashboard admin.
      *
-     * @param Skill $skill Modèle à supprimer
+     * @param Skill $skill
      * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Skill $skill)
     {
-        $skill->delete();
-        return response()->json(['message' => 'Skill supprimé']);
+        try {
+            $skill->delete();
+            return response()->json(['message' => 'Compétence supprimée']);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Erreur de connexion à la base de données'], 500);
+        }
     }
 }

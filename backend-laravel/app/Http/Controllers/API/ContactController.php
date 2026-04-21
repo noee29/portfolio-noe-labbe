@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Contact;
 use App\Http\Requests\ContactStoreRequest;
 use App\Http\Requests\ContactUpdateRequest;
@@ -11,49 +10,76 @@ use App\Http\Requests\ContactUpdateRequest;
 class ContactController extends Controller
 {
     /**
-     * Liste tous les messages de contact.
+     * Liste tous les messages de contact pour l'administration.
      *
      * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
-        return response()->json(Contact::all());
+        try {
+            $contacts = Contact::all();
+            return response()->json($contacts);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Erreur de connexion à la base de données'], 500);
+        }
     }
 
-    /**
-     * Crée un nouveau message de contact à partir des données validées.
-     *
-     * @param ContactStoreRequest $request Données de contact validées
-     * @return \Illuminate\Http\JsonResponse
-     */
+    // Créer un nouveau message de contact
     public function store(ContactStoreRequest $request)
     {
-        $contact = Contact::create($request->validated());
-        return response()->json($contact, 201);
+        try {
+            $data = $request->validated();
+            $contact = Contact::create($data);
+
+            return response()->json($contact, 201);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Erreur de connexion à la base de données'], 500);
+        }
     }
 
-    /**
-     * Met à jour un message de contact existant.
-     *
-     * @param ContactUpdateRequest $request Données mises à jour validées
-     * @param Contact $contact Modèle à modifier
-     * @return \Illuminate\Http\JsonResponse
-     */
+    // Modifier un message de contact
     public function update(ContactUpdateRequest $request, Contact $contact)
     {
-        $contact->update($request->validated());
-        return response()->json($contact);
+        try {
+            $contact->update($request->validated());
+            return response()->json($contact);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Erreur de connexion à la base de données'], 500);
+        }
     }
 
     /**
-     * Supprime un message de contact.
+     * Supprime un message de contact depuis l'admin.
      *
-     * @param Contact $contact Modèle à supprimer
+     * @param Contact $contact
      * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Contact $contact)
     {
-        $contact->delete();
-        return response()->json(['message' => 'Contact supprimé']);
+        try {
+            $contact->delete();
+            return response()->json(['message' => 'Contact supprimé']);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Erreur de connexion à la base de données'], 500);
+        }
+    }
+
+    /**
+     * Marque un message de contact comme lu dans l'administration.
+     *
+     * @param Contact $contact
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function markAsRead(Contact $contact)
+    {
+        try {
+            $contact->update(['read' => true]);
+            return response()->json([
+                'message' => 'Message marqué comme lu',
+                'contact' => $contact,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Erreur de connexion à la base de données'], 500);
+        }
     }
 }
