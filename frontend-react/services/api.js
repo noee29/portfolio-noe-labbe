@@ -13,7 +13,7 @@ const api = axios.create({
   withCredentials: true,
 });
 
-// Intercepteur pour ajouter le token
+// Ajoute automatiquement le token (si présent) sur chaque requête API.
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('authToken');
@@ -27,7 +27,7 @@ api.interceptors.request.use(
   }
 );
 
-// Intercepteur pour gérer les erreurs
+// Si l'API répond 401, on nettoie le token local et on renvoie vers /admin.
 api.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -140,7 +140,8 @@ export const contactApi = {
 };
 
 /**
- * Services d'authentification.
+ * Appels d'authentification admin.
+ * login/register renvoient un token, logout coupe la session API.
  */
 export const authApi = {
   /** Inscription d'un nouvel utilisateur. */

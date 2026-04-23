@@ -9,13 +9,16 @@ use Illuminate\Http\Request;
 use App\Models\User;
 
 
+/**
+ * Gère l'authentification admin avec Sanctum.
+ *
+ * login => token, token => accès aux routes protégées,
+ * logout => suppression des tokens.
+ */
 class AuthController extends Controller
 {
     /**
-     * Inscription d'un nouvel utilisateur.
-     *
-     * @param Request $request Données d'inscription (email, password, password_confirmation)
-     * @return \Illuminate\Http\JsonResponse
+     * Crée un nouvel utilisateur puis retourne un token Sanctum.
      */
     public function register(Request $request)
     {
@@ -37,7 +40,7 @@ class AuthController extends Controller
             'name' => explode('@', $validated['email'])[0],
         ]);
 
-        // Token Sanctum
+        // Token envoyé au frontend pour les appels API admin.
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
@@ -48,10 +51,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Authentifie un utilisateur et génère un token Sanctum.
-     *
-     * @param Request $request Données de connexion (email, password)
-     * @return \Illuminate\Http\JsonResponse
+     * Vérifie les identifiants et retourne un token Sanctum si c'est valide.
      */
     public function login(Request $request)
     {
@@ -80,10 +80,10 @@ class AuthController extends Controller
             ], 401);
         }
 
-        // Authentifier l'utilisateur
+        // Marque l'utilisateur comme connecté côté Laravel.
         Auth::login($user);
 
-        // Token Sanctum
+        // Token utilisé ensuite en Bearer côté frontend.
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
@@ -93,12 +93,9 @@ class AuthController extends Controller
         ]);
     }
 
-    /**
-     * Révoque tous les tokens de l'utilisateur courant.
-     *
-     * @param Request $request Requête authentifiée
-     * @return \Illuminate\Http\JsonResponse
-     */
+     /**
+      * Déconnecte l'utilisateur en supprimant ses tokens.
+      */
     public function logout(Request $request)
     {
         $request->user()->tokens()->delete();
@@ -106,23 +103,19 @@ class AuthController extends Controller
         return response()->json(['message' => 'Déconnexion réussie']);
     }
 
-    /**
-     * Retourne l'utilisateur authentifié.
-     *
-     * @param Request $request Requête authentifiée
-     * @return \Illuminate\Http\JsonResponse
-     */
+     /**
+      * Retourne l'utilisateur actuellement authentifié.
+      */
     public function user(Request $request)
     {
         return response()->json($request->user());
     }
 
-    /**
-     * Rafraîchit le token Sanctum de l'utilisateur courant.
-     *
-     * @param Request $request Requête authentifiée
-     * @return \Illuminate\Http\JsonResponse
-     */
+     /**
+      * Régénère un token en supprimant les anciens.
+      *
+      * Note: la méthode existe mais n'est pas routée dans routes/api.php.
+      */
     public function refresh(Request $request)
     {
         /** @var User|null $user */
