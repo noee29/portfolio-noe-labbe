@@ -27,12 +27,16 @@ function ElementFormation({ f }) {
   );
 }
 
+/**
+ * Section des formations affichées sur la page Formations
+ */
 export default function SectionFormations() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(function() {
+    // Evite un setState après un démontage pendant une requête lente.
     let composantMonte = true;
     
     function chargerFormations() {
@@ -40,12 +44,14 @@ export default function SectionFormations() {
         .then(function(reponse) {
           let formations = [];
           
+          // Accepte les deux formats usuels: tableau direct ou { data: [] }.
           if (Array.isArray(reponse.data)) {
             formations = reponse.data;
           } else if (reponse.data && reponse.data.data && Array.isArray(reponse.data.data)) {
             formations = reponse.data.data;
           }
           
+          // La section affiche un extrait court du parcours.
           const cinqPremieres = formations.slice(0, 5);
           
           if (composantMonte) {

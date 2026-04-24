@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { cvApi } from '../services/api.js';
 
+/**
+ * Page d'administration du CV (consultation et upload).
+ */
 export default function PageAdminCV() {
   const [currentFile, setCurrentFile] = useState('');
   const [currentUrl, setCurrentUrl] = useState('');

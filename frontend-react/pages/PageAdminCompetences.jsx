@@ -7,6 +7,9 @@ const initialForm = {
   category: 'Informatique',
 };
 
+/**
+ * Page d'administration des compétences (CRUD + icone).
+ */
 export default function PageAdminCompetences() {
   const [skills, setSkills] = useState([]);
   const [form, setForm] = useState(initialForm);

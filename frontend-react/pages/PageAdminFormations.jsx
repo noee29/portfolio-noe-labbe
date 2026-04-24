@@ -11,6 +11,9 @@ const initialForm = {
   description: '',
 };
 
+/**
+ * Page d'administration des formations (CRUD).
+ */
 export default function PageAdminFormations() {
   const [formations, setFormations] = useState([]);
   const [form, setForm] = useState(initialForm);

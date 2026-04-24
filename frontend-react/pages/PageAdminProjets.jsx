@@ -11,6 +11,9 @@ const initialForm = {
   featured: false,
 };
 
+/**
+ * Page d'administration des projets (CRUD + gestion des medias).
+ */
 export default function PageAdminProjets() {
   const [projects, setProjects] = useState([]);
   const [form, setForm] = useState(initialForm);

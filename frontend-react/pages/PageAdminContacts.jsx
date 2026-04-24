@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { contactApi } from '../services/api.js';
 
+/**
+ * Page d'administration des messages du formulaire de contact.
+ */
 export default function PageAdminContacts() {
   const [contacts, setContacts] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -22,6 +25,7 @@ export default function PageAdminContacts() {
       if (response && response.data && Array.isArray(response.data)) {
         const list = response.data.slice();
 
+        // Trie du plus récent au plus ancien pour prioriser les nouveaux messages.
         list.sort(function (a, b) {
           let aDate = 0;
           if (a.created_at) {
@@ -72,6 +76,7 @@ export default function PageAdminContacts() {
       setMessage('Message marque comme lu.');
       await loadContacts();
     } catch (err) {
+      // Affiche le message backend si disponible, sinon un message générique.
       let apiMessage = '';
       if (err && err.response && err.response.data && err.response.data.message) {
         apiMessage = err.response.data.message;
@@ -90,6 +95,7 @@ export default function PageAdminContacts() {
   }
 
   async function handleDelete(contactId) {
+    // Confirmation explicite pour éviter une suppression accidentelle.
     const ok = window.confirm('Supprimer ce message.');
     if (!ok) {
       return;

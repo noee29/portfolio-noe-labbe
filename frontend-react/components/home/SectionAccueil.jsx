@@ -3,6 +3,9 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import ConteneurPage from '../layout/ConteneurPage.jsx';
 
+/**
+ * Section page d'accueil avec présentation, disponibilités et langues.
+ */
 export default function SectionAccueil() {
   return (
     <section id="hero" className="relative overflow-hidden pt-20 sm:pt-32 pb-20 sm:pb-28">

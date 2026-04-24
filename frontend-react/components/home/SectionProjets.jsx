@@ -21,6 +21,7 @@ function CardProjet({ project }) {
       {Array.isArray(project.tags) && project.tags.length > 0 && (
         <div className="mt-3 flex flex-wrap gap-2">
           {project.tags.slice(0, 5).map((t, idx) => {
+            // Uniformise l'affichage quel que soit le format reçu (string ou objet tag).
             let tagText = '';
             if (typeof t === 'string') {
               tagText = t;
@@ -40,12 +41,16 @@ function CardProjet({ project }) {
   );
 }
 
+/**
+ * Section des projets sélectionnés pour la page d'accueil.
+ */
 export default function SectionProjets() {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(function() {
+    // Evite un setState après un démontage pendant une requête lente.
     let composantMonte = true;
     
     function chargerProjets() {
@@ -53,6 +58,7 @@ export default function SectionProjets() {
         .then(function(reponse) {
           let projets = [];
           
+          // Accepte les deux formats usuels: tableau direct ou { data: [] }.
           if (Array.isArray(reponse.data)) {
             projets = reponse.data;
           } else if (reponse.data && reponse.data.data && Array.isArray(reponse.data.data)) {

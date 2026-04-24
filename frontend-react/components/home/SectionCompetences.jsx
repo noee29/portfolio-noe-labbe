@@ -2,12 +2,16 @@ import { useEffect, useState } from 'react';
 import SectionPage from '../layout/SectionPage.jsx';
 import { skillsApi } from '../../services/api.js';
 
+/**
+ * Section des compétences affichées sur la page Compétences.
+ */
 export default function SectionCompetences() {
   const [skills, setSkills] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(function() {
+    // Evite un setState après un démontage pendant une requête lente.
     let composantMonte = true;
     
     function chargerCompetences() {
@@ -15,6 +19,7 @@ export default function SectionCompetences() {
         .then(function(reponse) {
           let competences = [];
           
+          // Accepte les deux formats usuels: tableau direct ou { data: [] }.
           if (Array.isArray(reponse.data)) {
             competences = reponse.data;
           } else if (reponse.data && reponse.data.data && Array.isArray(reponse.data.data)) {
