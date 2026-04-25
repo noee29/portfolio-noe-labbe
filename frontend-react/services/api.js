@@ -1,7 +1,12 @@
 import axios from 'axios';
 
-// L'URL de l'API vient du fichier .env (variable VITE_API_URL) par défaut localhost:8000.
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+// Base API unique pour tout le frontend (VITE_API_URL), avec fallback relatif en local/prod.
+const rawApiUrl = (import.meta.env.VITE_API_URL || '/api').trim();
+export const API_URL = rawApiUrl.replace(/\/+$/, '') || '/api';
+export const BACKEND_ORIGIN = API_URL.replace(/\/api\/?$/, '');
+
+// Optionnel mais explicite: base globale axios + instance dédiée.
+axios.defaults.baseURL = API_URL;
 
 // Instance axios préconfigurée vers l'API Laravel.
 const api = axios.create({
