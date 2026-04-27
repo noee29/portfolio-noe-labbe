@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import ConteneurPage from '../layout/ConteneurPage.jsx';
 
 /**
@@ -6,13 +6,19 @@ import ConteneurPage from '../layout/ConteneurPage.jsx';
  */
 export default function BasPage() {
   const anneeActuelle = new Date().getFullYear();
+  const location = useLocation();
+  
+  // Ne pas afficher le footer sur les pages admin
+  if (location.pathname.startsWith('/admin')) {
+    return null;
+  }
   
   return (
     <footer className="relative border-t border-cyan-500/20 bg-[#0d1818]">
       <ConteneurPage className="py-12 flex flex-col sm:flex-row items-center justify-between gap-6">
         {/* Copyright */}
         <p className="text-xs text-gray-400 font-medium">
-          © {anneeActuelle} Portfolio
+          © {anneeActuelle} Noé LABBÉ. Tous droits réservés.
         </p>
         
         {/* Liens de navigation */}
