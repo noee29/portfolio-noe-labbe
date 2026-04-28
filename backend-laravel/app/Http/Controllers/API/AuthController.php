@@ -12,7 +12,11 @@ use App\Models\User;
 /**
  * Gère l'authentification admin avec Sanctum.
  *
+<<<<<<< HEAD
+ * login => token, token => accès aux routes protégées,
+=======
  * Idée simple : login => token, token => accès aux routes protégées,
+>>>>>>> 72aa03669fd8fdf2a94e788e9c1b8922819f3b94
  * logout => suppression des tokens.
  */
 class AuthController extends Controller
