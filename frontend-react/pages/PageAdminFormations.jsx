@@ -26,6 +26,9 @@ export default function PageAdminFormations() {
     loadFormations();
   }, []);
 
+  /**
+   * Charge la liste des formations depuis l'API.
+   */
   async function loadFormations() {
     setLoading(true);
     setError('');
@@ -44,11 +47,17 @@ export default function PageAdminFormations() {
     setLoading(false);
   }
 
+  /**
+  * Réinitialise le formulaire et l'état d'édition.
+   */
   function resetForm() {
     setForm(initialForm);
     setEditingId(null);
   }
 
+  /**
+  * Met à jour le formulaire avec les valeurs saisies.
+   */
   function onChange(event) {
     const name = event.target.name;
     const value = event.target.value;
@@ -74,6 +83,9 @@ export default function PageAdminFormations() {
     });
   }
 
+  /**
+   * Normalise une date pour un champ input type date.
+   */
   function formatDateForInput(value) {
     if (!value) {
       return '';
@@ -84,6 +96,9 @@ export default function PageAdminFormations() {
     return value;
   }
 
+  /**
+   * Charge une formation existante dans le formulaire.
+   */
   function startEdit(formation) {
     setEditingId(formation.id);
 
@@ -118,6 +133,9 @@ export default function PageAdminFormations() {
     setError('');
   }
 
+  /**
+   * Construit le payload JSON pour l'API.
+   */
   function buildPayload() {
     const payload = {
       school: form.school.trim(),
@@ -151,6 +169,9 @@ export default function PageAdminFormations() {
     return payload;
   }
 
+  /**
+  * Valide puis enregistre la formation (création ou mise à jour).
+   */
   async function onSubmit(event) {
     event.preventDefault();
     setMessage('');
@@ -198,6 +219,9 @@ export default function PageAdminFormations() {
     setLoading(false);
   }
 
+  /**
+  * Supprime une formation après confirmation.
+   */
   async function onDelete(formationId) {
     const ok = window.confirm('Supprimer cette formation.');
     if (!ok) {

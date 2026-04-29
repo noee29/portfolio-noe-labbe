@@ -17,6 +17,9 @@ export default function PageAdminCV() {
     loadCurrentCv();
   }, []);
 
+  /**
+  * Récupère le CV courant (nom + URL) depuis l'API.
+   */
   async function loadCurrentCv() {
     setLoading(true);
     setError('');
@@ -56,6 +59,9 @@ export default function PageAdminCV() {
     setLoading(false);
   }
 
+  /**
+  * Valide le fichier sélectionné (PDF, taille max 5 Mo).
+   */
   function onFileChange(event) {
     const files = event.target.files;
     setMessage('');
@@ -71,7 +77,7 @@ export default function PageAdminCV() {
     const isSizeValid = file.size <= 5 * 1024 * 1024;
 
     if (!isPdf) {
-      setError('Le fichier doit etre un PDF.');
+      setError('Le fichier doit être un PDF.');
       setSelectedFile(null);
       return;
     }
@@ -85,13 +91,16 @@ export default function PageAdminCV() {
     setSelectedFile(file);
   }
 
+  /**
+   * Envoie le nouveau CV vers l'API admin.
+   */
   async function onSubmit(event) {
     event.preventDefault();
     setMessage('');
     setError('');
 
     if (!selectedFile) {
-      setError('Selectionne un fichier PDF.');
+      setError('Sélectionne un fichier PDF.');
       return;
     }
 
@@ -112,12 +121,12 @@ export default function PageAdminCV() {
         }
       }
 
-      setMessage('CV mis a jour avec succes.');
+      setMessage('CV mis à jour avec succès.');
       setSelectedFile(null);
       await loadCurrentCv();
     } catch (err) {
       if (err && err.response && err.response.status === 401) {
-        setError('Session admin expiree. Reconnecte-toi puis reessaie.');
+        setError('Session admin expirée. Reconnecte-toi puis réessaie.');
         setLoading(false);
         return;
       }
@@ -132,7 +141,7 @@ export default function PageAdminCV() {
       }
 
       if (apiMessage === '') {
-        setError('Erreur lors de la mise a jour du CV.');
+        setError('Erreur lors de la mise à jour du CV.');
       }
     }
 
@@ -182,7 +191,7 @@ export default function PageAdminCV() {
       </div>
 
       <div className="rounded-xl bg-slate-800 p-5">
-        <h2 className="mb-3 text-lg font-semibold text-emerald-300">Mettre a jour le CV</h2>
+        <h2 className="mb-3 text-lg font-semibold text-emerald-300">Mettre à jour le CV</h2>
 
         <form onSubmit={onSubmit} className="space-y-3">
           <input
@@ -192,7 +201,7 @@ export default function PageAdminCV() {
             className="w-full rounded-lg border border-slate-500 bg-slate-900 px-3 py-2 text-slate-100"
           />
 
-          <p className="text-xs text-slate-300">Format autorise: PDF - Taille max: 5 Mo</p>
+          <p className="text-xs text-slate-300">Format autorisé : PDF - Taille max : 5 Mo</p>
 
           <button
             type="submit"

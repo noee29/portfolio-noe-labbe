@@ -15,7 +15,7 @@ export default function PageDashboardAdmin() {
   const sections = [
     {
       title: 'Projets',
-      description: 'Gerer les projets, documents et informations principales.',
+      description: 'Gérer les projets, documents et informations principales.',
       to: '/admin/projets',
       action: 'Ouvrir',
     },
@@ -27,24 +27,27 @@ export default function PageDashboardAdmin() {
     },
     {
       title: 'Formations',
-      description: 'Mettre a jour le parcours de formation.',
+      description: 'Mettre à jour le parcours de formation.',
       to: '/admin/formations',
       action: 'Ouvrir',
     },
     {
       title: 'Contacts',
-      description: 'Consulter les messages recus depuis le formulaire.',
+      description: 'Consulter les messages reçus depuis le formulaire.',
       to: '/admin/contacts',
       action: 'Ouvrir',
     },
     {
       title: 'CV',
-      description: 'Gerer le fichier CV disponible au telechargement.',
+      description: 'Gérer le fichier CV disponible au téléchargement.',
       to: '/admin/cv',
       action: 'Ouvrir',
     },
   ];
 
+  /**
+  * Déconnecte l'admin côté API puis nettoie le token.
+   */
   async function handleLogout() {
     setLoading(true);
     setError('');
@@ -73,7 +76,7 @@ export default function PageDashboardAdmin() {
             disabled={loading}
             className="rounded-lg bg-rose-400 px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-rose-300"
           >
-            Deconnexion
+            Déconnexion
           </button>
         </div>
 

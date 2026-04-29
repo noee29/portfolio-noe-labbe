@@ -27,6 +27,9 @@ export default function PageAdminProjets() {
     loadProjects();
   }, []);
 
+  /**
+   * Charge les projets admin depuis l'API.
+   */
   async function loadProjects() {
     setLoading(true);
     setError('');
@@ -40,12 +43,18 @@ export default function PageAdminProjets() {
     setLoading(false);
   }
 
+  /**
+  * Réinitialise le formulaire, l'édition et les médias.
+   */
   function resetForm() {
     setForm(initialForm);
     setEditingId(null);
     setMediaFiles([]);
   }
 
+  /**
+  * Met à jour les champs texte du formulaire.
+   */
   function onTextChange(event) {
     const name = event.target.name;
     const value = event.target.value;
@@ -67,6 +76,9 @@ export default function PageAdminProjets() {
     });
   }
 
+  /**
+  * Met à jour l'état du flag "mis en avant".
+   */
   function onFeaturedChange(event) {
     const checked = event.target.checked;
     setForm(function (old) {
@@ -81,6 +93,9 @@ export default function PageAdminProjets() {
     });
   }
 
+  /**
+  * Pré-remplit le formulaire pour modifier un projet.
+   */
   function startEdit(project) {
     let technologiesText = '';
     if (Array.isArray(project.technologies)) technologiesText = project.technologies.join(', ');
@@ -97,6 +112,9 @@ export default function PageAdminProjets() {
     setError('');
   }
 
+  /**
+  * Construit le payload JSON pour création/mise à jour.
+   */
   function buildPayload() {
     const title = form.title.trim();
     const description = form.description.trim();
@@ -125,6 +143,9 @@ export default function PageAdminProjets() {
     return payload;
   }
 
+  /**
+  * Vérifie si une URL est valide en http/https.
+   */
   function isValidHttpUrl(value) {
     try {
       const url = new URL(value);
@@ -137,6 +158,9 @@ export default function PageAdminProjets() {
     }
   }
 
+  /**
+  * Enregistre le projet et uploade les médias si présents.
+   */
   async function handleSubmit(event) {
     event.preventDefault();
     setMessage('');
@@ -150,12 +174,12 @@ export default function PageAdminProjets() {
     }
 
     if (form.github_link.trim() !== '' && !isValidHttpUrl(form.github_link.trim())) {
-      setError('Le lien GitHub doit etre une URL valide (http ou https).');
+      setError('Le lien GitHub doit être une URL valide (http ou https).');
       return;
     }
 
     if (form.demo_link.trim() !== '' && !isValidHttpUrl(form.demo_link.trim())) {
-      setError('Le lien Demo doit etre une URL valide (http ou https).');
+      setError('Le lien Démo doit être une URL valide (http ou https).');
       return;
     }
 
@@ -168,13 +192,13 @@ export default function PageAdminProjets() {
       if (editingId !== null) {
         await projectsApi.update(editingId, payload);
         projectId = editingId;
-        setMessage('Projet modifie.');
+        setMessage('Projet modifié.');
       }
 
       if (editingId === null) {
         const response = await projectsApi.create(payload);
         if (response && response.data && response.data.id) projectId = response.data.id;
-        setMessage('Projet cree.');
+        setMessage('Projet créé.');
       }
 
       if (projectId !== null && mediaFiles.length > 0) {
@@ -195,6 +219,9 @@ export default function PageAdminProjets() {
     setLoading(false);
   }
 
+  /**
+  * Supprime un projet après confirmation.
+   */
   async function handleProjectDelete(projectId) {
     const ok = window.confirm('Supprimer ce projet.');
     if (!ok) return;
@@ -205,7 +232,7 @@ export default function PageAdminProjets() {
 
     try {
       await projectsApi.delete(projectId);
-      setMessage('Projet supprime.');
+      setMessage('Projet supprimé.');
       await loadProjects();
     } catch (err) {
       let apiMessage = '';
@@ -217,6 +244,9 @@ export default function PageAdminProjets() {
     setLoading(false);
   }
 
+  /**
+  * Supprime un média d'un projet après confirmation.
+   */
   async function handleMediaDelete(projectId, mediaId) {
     const ok = window.confirm('Supprimer ce media.');
     if (!ok) return;
@@ -227,13 +257,13 @@ export default function PageAdminProjets() {
 
     try {
       await projectsApi.deleteMedia(projectId, mediaId);
-      setMessage('Media supprime.');
+      setMessage('Média supprimé.');
       await loadProjects();
     } catch (err) {
       let apiMessage = '';
       if (err && err.response && err.response.data && err.response.data.message) apiMessage = err.response.data.message;
       if (apiMessage !== '') setError(apiMessage);
-      if (apiMessage === '') setError('Erreur lors de la suppression du media.');
+      if (apiMessage === '') setError('Erreur lors de la suppression du média.');
     }
 
     setLoading(false);
@@ -265,7 +295,7 @@ export default function PageAdminProjets() {
           </div>
           <div className="grid gap-3 sm:grid-cols-2">
             <div className="rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-xs text-slate-300">
-              Documents projet (captures/video)
+              Documents projet (captures/vidéo)
             </div>
             <input type="file" accept=".png,.jpg,.jpeg,.mp4" multiple onChange={function (event) { const files = event.target.files; if (files) setMediaFiles(files); if (!files) setMediaFiles([]); }} className="w-full rounded-lg border border-slate-500 bg-slate-900 px-3 py-2 text-slate-100" />
           </div>
@@ -302,14 +332,14 @@ export default function PageAdminProjets() {
                   </div>
                   <div className="mt-4 rounded-lg border border-slate-700 bg-slate-800 p-3">
                     <p className="mb-2 text-sm font-semibold text-amber-200">Documents</p>
-                    {(!project.images || project.images.length === 0) && <p className="text-xs text-slate-300">Aucun media.</p>}
+                    {(!project.images || project.images.length === 0) && <p className="text-xs text-slate-300">Aucun média.</p>}
                     {project.images && project.images.length > 0 && (
                       <div className="space-y-2">
                         {project.images.map(function (media) {
                           return (
                             <div key={media.id} className="flex items-center justify-between gap-2 rounded border border-slate-600 p-2">
-                              <p className="text-xs text-slate-200">Media {media.id} - {media.file_type}</p>
-                              <button type="button" onClick={function () { handleMediaDelete(project.id, media.id); }} className="rounded bg-rose-400 px-2 py-1 text-xs font-semibold text-slate-900 hover:bg-rose-300">Supprimer media</button>
+                              <p className="text-xs text-slate-200">Média {media.id} - {media.file_type}</p>
+                              <button type="button" onClick={function () { handleMediaDelete(project.id, media.id); }} className="rounded bg-rose-400 px-2 py-1 text-xs font-semibold text-slate-900 hover:bg-rose-300">Supprimer média</button>
                             </div>
                           );
                         })}

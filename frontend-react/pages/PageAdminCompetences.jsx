@@ -8,7 +8,7 @@ const initialForm = {
 };
 
 /**
- * Page d'administration des compétences (CRUD + icone).
+ * Page d'administration des compétences (CRUD + icône).
  */
 export default function PageAdminCompetences() {
   const [skills, setSkills] = useState([]);
@@ -23,7 +23,7 @@ export default function PageAdminCompetences() {
     'Informatique',
     'Frontend',
     'Backend',
-    'Base de donnees',
+    'Base de données',
     'DevOps',
     'Outils',
     'Autre',
@@ -33,6 +33,9 @@ export default function PageAdminCompetences() {
     loadSkills();
   }, []);
 
+  /**
+  * Charge la liste des compétences depuis l'API.
+   */
   async function loadSkills() {
     setLoading(true);
     setError('');
@@ -51,12 +54,18 @@ export default function PageAdminCompetences() {
     setLoading(false);
   }
 
+  /**
+  * Réinitialise le formulaire et l'état d'édition.
+   */
   function resetForm() {
     setForm(initialForm);
     setEditingId(null);
     setIconFile(null);
   }
 
+  /**
+  * Met à jour le formulaire à partir des champs saisis.
+   */
   function onChange(event) {
     const name = event.target.name;
     const value = event.target.value;
@@ -74,6 +83,9 @@ export default function PageAdminCompetences() {
     });
   }
 
+  /**
+  * Pré-remplit le formulaire pour modifier une compétence.
+   */
   function startEdit(skill) {
     setEditingId(skill.id);
     setForm({
@@ -85,6 +97,9 @@ export default function PageAdminCompetences() {
     setError('');
   }
 
+  /**
+  * Construit le payload (FormData) pour la création ou la mise à jour.
+   */
   function buildPayload() {
     const payload = new FormData();
     payload.append('name', form.name.trim());
@@ -99,6 +114,9 @@ export default function PageAdminCompetences() {
     return payload;
   }
 
+  /**
+   * Valide et envoie le formulaire vers l'API.
+   */
   async function onSubmit(event) {
     event.preventDefault();
     setMessage('');
@@ -141,6 +159,9 @@ export default function PageAdminCompetences() {
     setLoading(false);
   }
 
+  /**
+  * Supprime une compétence après confirmation.
+   */
   async function onDelete(skillId) {
     const ok = window.confirm('Supprimer cette compétence.');
     if (!ok) {
@@ -223,13 +244,13 @@ export default function PageAdminCompetences() {
                   const isAllowedSize = file.size <= 2 * 1024 * 1024;
 
                   if (!isAllowedType) {
-                    setError('Format icone invalide. Utilise PNG ou JPG.');
+                    setError('Format icône invalide. Utilise PNG ou JPG.');
                     setIconFile(null);
                     return;
                   }
 
                   if (!isAllowedSize) {
-                    setError('Icone trop lourde. Taille max: 2 Mo.');
+                    setError('Icône trop lourde. Taille max: 2 Mo.');
                     setIconFile(null);
                     return;
                   }

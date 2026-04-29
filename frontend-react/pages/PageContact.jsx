@@ -17,6 +17,9 @@ export default function PageContact() {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
 
+  /**
+  * Met à jour l'état du formulaire à chaque saisie.
+   */
   function handleChange(event) {
     const champName = event.target.name;
     const champValue = event.target.value;
@@ -40,6 +43,9 @@ export default function PageContact() {
     });
   }
 
+  /**
+   * Valide et envoie le message de contact.
+   */
   async function handleSubmit(event) {
     event.preventDefault();
     

@@ -23,6 +23,9 @@ function ElementFormation(props) {
   let school = formation.school || '';
 
   // Extraire l'année depuis la date (ex: "2025-09-01" → "2025")
+  /**
+  * Extrait l'année au format YYYY
+   */
   function getYear(dateString) {
     if (!dateString) return '';
     return dateString.substring(0, 4);
@@ -86,6 +89,9 @@ export default function PageFormations() {
   useEffect(function() {
     let composantMonte = true;
     
+    /**
+    * Récupère les formations depuis l'API.
+     */
     function chargerFormations() {
       formationsApi.getAll()
         .then(function(reponse) {

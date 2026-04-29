@@ -11,11 +11,17 @@ export default function PageCompetences() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
+  /**
+  * Retourne l'origine du backend à partir de l'URL API.
+   */
   function getBackendBaseUrl() {
     const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
     return apiUrl.replace('/api', '');
   }
 
+  /**
+  * Résout l'URL finale de l'icône d'une compétence.
+   */
   function getSkillIconUrl(skill) {
     if (!skill) {
       return '';
@@ -38,6 +44,9 @@ export default function PageCompetences() {
     return '';
   }
 
+  /**
+  * Retourne la catégorie d'une compétence avec fallback.
+   */
   function getCategory(skill) {
     if (skill && skill.category && skill.category.trim() !== '') {
       return skill.category;
@@ -45,6 +54,9 @@ export default function PageCompetences() {
     return 'Autre';
   }
 
+  /**
+  * Retourne un nom affichable pour une compétence.
+   */
   function getDisplayName(skill) {
     if (skill && skill.name && skill.name.trim() !== '') {
       return skill.name;
@@ -52,6 +64,9 @@ export default function PageCompetences() {
     return 'Compétence';
   }
 
+  /**
+  * Génère des initiales à partir d'un nom.
+   */
   function getInitials(name) {
     if (!name || name.trim() === '') {
       return 'C';
@@ -65,6 +80,9 @@ export default function PageCompetences() {
     return (parts[0].charAt(0) + parts[1].charAt(0)).toUpperCase();
   }
 
+  /**
+  * Groupe une liste de compétences par catégorie.
+   */
   function groupSkillsByCategory(items) {
     const result = {};
 

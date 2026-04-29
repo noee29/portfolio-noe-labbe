@@ -26,11 +26,17 @@ export default function PageDetailProjet() {
   }, [id]);
 
   // Vérifie si c'est une vidéo
+  /**
+  * Indique si un média est une vidéo.
+   */
   function estVideo(media) {
     return media.file_type === 'video';
   }
 
   // Résout l'URL d'un média quelle que soit sa source (storage Laravel, URL absolue, ancien dossier Assets)
+  /**
+  * Résout l'URL d'un média (storage, URL absolue, Assets).
+   */
   function cheminMedia(media) {
     if (!media) {
       return '';
@@ -41,7 +47,7 @@ export default function PageDetailProjet() {
       filePath = media.file_path;
     }
 
-    // Compatibilite anciens projets: medias stockes dans frontend/public/Assets
+    // Compatibilité anciens projets : médias stockés dans frontend/public/Assets
     if (filePath.startsWith('Assets/')) {
       return '/' + filePath;
     }
@@ -143,6 +149,9 @@ export default function PageDetailProjet() {
   }
 
   // Affiche le bon contenu
+  /**
+  * Retourne le JSX du média pour l'afficher en plein écran (vidéo ou image).
+   */
   function afficherMediaModal() {
     if (!mediaOuvert) {
       return null;

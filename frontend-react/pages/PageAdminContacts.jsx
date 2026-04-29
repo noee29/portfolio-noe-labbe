@@ -15,6 +15,9 @@ export default function PageAdminContacts() {
     loadContacts();
   }, []);
 
+  /**
+  * Charge les messages de contact et les trie du plus récent.
+   */
   async function loadContacts() {
     setLoading(true);
     setError('');
@@ -53,6 +56,9 @@ export default function PageAdminContacts() {
     setLoading(false);
   }
 
+  /**
+   * Formate une date en locale FR, avec fallback si invalide.
+   */
   function formatDate(value) {
     if (!value) {
       return 'Date inconnue';
@@ -66,6 +72,9 @@ export default function PageAdminContacts() {
     return date.toLocaleString('fr-FR');
   }
 
+  /**
+   * Marque un message comme lu et recharge la liste.
+   */
   async function handleMarkAsRead(contactId) {
     setLoading(true);
     setMessage('');
@@ -73,7 +82,7 @@ export default function PageAdminContacts() {
 
     try {
       await contactApi.markAsRead(contactId);
-      setMessage('Message marque comme lu.');
+      setMessage('Message marqué comme lu.');
       await loadContacts();
     } catch (err) {
       // Affiche le message backend si disponible, sinon un message générique.
@@ -94,6 +103,9 @@ export default function PageAdminContacts() {
     setLoading(false);
   }
 
+  /**
+  * Supprime un message après confirmation utilisateur.
+   */
   async function handleDelete(contactId) {
     // Confirmation explicite pour éviter une suppression accidentelle.
     const ok = window.confirm('Supprimer ce message.');
@@ -107,7 +119,7 @@ export default function PageAdminContacts() {
 
     try {
       await contactApi.delete(contactId);
-      setMessage('Message supprime.');
+      setMessage('Message supprimé.');
       await loadContacts();
     } catch (err) {
       let apiMessage = '';
@@ -201,7 +213,7 @@ export default function PageAdminContacts() {
                   </div>
 
                   <p className="text-sm text-slate-200">{email}</p>
-                  <p className="mt-1 text-xs text-slate-400">Recu le {dateText}</p>
+                  <p className="mt-1 text-xs text-slate-400">Reçu le {dateText}</p>
                   <p className="mt-3 whitespace-pre-wrap text-sm text-slate-200">{text}</p>
 
                   <div className="mt-4 flex gap-2">
